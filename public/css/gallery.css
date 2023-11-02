@@ -1,0 +1,121 @@
+/* *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body{
+    background: #ffb63a;
+    
+}
+
+.container{
+    max-width: 1000px;
+    margin: 40px auto 0 auto;
+    
+} */
+
+.add-images{
+min-height: 300px;
+background-color: white;
+    box-shadow: 0 8px 16px rgba(91, 91, 91, 0.15);
+    padding: 25px 50px;
+
+}
+
+.add-images h1{
+    text-align: center;
+}
+
+form{
+    margin-top: 40px;
+}
+label{
+    display: block;
+}
+
+form >div{
+    margin-bottom: 20px;
+}
+
+.show-images{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.gallerie{
+    background-color: white;
+    box-shadow: 0 8px 16px rgba(91, 91, 91, 0.15);
+    flex-basis: 400px;
+    height: 300px;
+    padding: 25px;
+
+}
+
+.gallerie_image{
+    position: relative;
+    width: 100%;
+    height: 250px;
+    box-shadow:inset  0 8px 16px rgba(91, 91, 91, 0.15);
+
+}
+
+.gallerie_image > img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.icons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5); /* Background color for the overlay */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease; /* Smooth transition effect */
+}
+
+.gallerie_image:hover .icons {
+    opacity: 1; /* Show icons when hovering over the image */
+}
+
+.icons p a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.delete-form {
+    display: inline; /* Pour afficher le formulaire en ligne avec le texte */
+    margin: 0; /* Supprimez les marges par défaut du formulaire */
+}
+
+.delete-icon-button {
+    background: none; /* Supprime l'arrière-plan du bouton */
+    border: none; /* Supprime les bordures du bouton */
+    color: white; 
+    cursor: pointer; /* Curseur de type pointeur au survol du bouton */
+    font-size: 16px; /* Taille du texte du bouton */
+    margin: 0; /* Supprimez les marges du bouton */
+    padding: 0; /* Supprimez le rembourrage du bouton */
+}
+
+.delete-icon-button:hover {
+    text-decoration: underline; /* Souligne le texte du bouton au survol */
+}
+
+button > i {
+     color: white;
+margin: 0 10px;
+text-decoration: none;
+}

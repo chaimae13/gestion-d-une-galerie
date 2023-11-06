@@ -33,8 +33,8 @@
                     <img src="{{ asset('/storage/photos/' . $photo->path) }}" alt="Photo">
                     <div class="icons">
                         <p>
-                        <a href=""><i class="fa fa-link"></i></a>
                         <a href=""><i class="fa fa-edit"></i></a>
+                        <a href="{{ route('getHistograms', $photo->id ) }}"><i class="fa fa-link"></i></a>
                         <a href="{{ asset('/storage/photos/' . $photo->path) }}" download><i class="fa fa-download"></i></a>
                         
                         <form action="{{ route('photo.delete', $photo->id) }}" method="post" class="delete-form">

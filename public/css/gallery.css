@@ -1,20 +1,4 @@
-/* *{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: sans-serif;
-}
-
-body{
-    background: #ffb63a;
-    
-}
-
-.container{
-    max-width: 1000px;
-    margin: 40px auto 0 auto;
-    
-} */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css");
 
 .add-images{
 min-height: 300px;

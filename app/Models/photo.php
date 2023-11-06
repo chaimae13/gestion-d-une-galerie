@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Psy\Output\Theme;
 
 class photo extends Model
 {
@@ -15,4 +16,10 @@ class photo extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class);
+    }
+
 }

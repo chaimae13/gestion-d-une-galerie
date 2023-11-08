@@ -12,4 +12,6 @@
             <a href="{{route('register')}}">Register</a>
         </nav>
       </header>
+
+
 </body>

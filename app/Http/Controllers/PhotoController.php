@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Photo;
+use App\Models\theme;
 use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
@@ -32,6 +33,7 @@ class PhotoController extends Controller
         $photo->storeAs('photos', $photoName, 'public'); // This stores the file in the "storage/app/public/photos" directory
 
         $title = $request->input('title') ?? $photoName;
+        $themeId= $request->input('themeId');
     
         // Store the photo information in the database
         $user = auth()->user();
@@ -39,6 +41,7 @@ class PhotoController extends Controller
             'filename' => $title,
             'path' =>  $photoName,
             'user_id' => $user->id,
+            'theme_id'=>$themeId,
         ]);
         $photoRecord->save();
     
@@ -47,10 +50,11 @@ class PhotoController extends Controller
 public function index()
 {
     // Récupérer l'utilisateur authentifié
-    $user = auth()->user();
-
+    // $user = auth()->user();
+    $themes = theme::all();
+    $photos = Photo::all();
     // Charger la vue avec l'utilisateur et ses photos
-    return view('photos.index', compact('user'));
+    return view('photos.index', compact('photos'), compact('themes'));
 }
 public function delete(Photo $photo)
 {
@@ -89,16 +93,5 @@ public function getHistograms(Photo $photo)
 
 }
 
-// public function showColors()
-//     {
-//           // Make a POST request to your Flask API
-//     $response = $client->post('http://127.0.0.1:5000/ColorDominant', [
-//         'json' => ['image_path' => 'C:/Users/hp/Pictures/hey.jpeg'],
-//     ]);
 
-//     // Extract the color codes from the API response
-//     $colors = json_decode($response->getBody(), true)['hex_color_codes'];
-
-//     return view('form', ['colors' => $colors]);
-// }
 }

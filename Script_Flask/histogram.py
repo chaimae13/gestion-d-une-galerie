@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 import cv2
-from flask_cors import CORS
+#from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for your app
+#CORS(app)  # Enable CORS for your app
 
 def calculate_color_histogram(image_path):
     # Read the image

@@ -27,11 +27,11 @@ Route::post('/register', [AutheManager::class,'registerPost'])->name('register.p
 Route::get('/logout', [AutheManager::class,'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/gallery', [PhotoController::class, 'index']);
+    Route::get('/gallery', [PhotoController::class, 'index'])->name('gallery');
     Route::post('/gallery', [PhotoController::class, 'upload']);
     Route::delete('/gallery/{photo}', [PhotoController::class, 'delete'])->name('photo.delete');
-
 });
+
 
 // Route::get('/ColorDominant',[PhotoController::class, 'showColors']);
 Route::get('/getHistograms/{photo}',[PhotoController::class,'getHistograms'])->name('getHistograms');

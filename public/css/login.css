@@ -1,6 +1,26 @@
 *{
     box-sizing: border-box;
 }
+
+/*
+555B6E
+89B0AE
+BEE3DB
+FAF9F9
+FFD6BA
+
+Adobe
+#EB88CE
+#A16390
+#888B8C
+#F2F2F2
+#262626
+
+
+
+*/
+
+
 img{ 
     width: 120px;
     height: auto;
@@ -12,21 +32,36 @@ body{
     align-items: center;
     justify-content: center;
    height: 100%;
+   background-color:#c497a4b0 ;
+   z-index: 1;
 }
 H3{
-    color: #fff;
+    color: #0E233B;
+    font-weight:900;
 }
 
 .body:after {
     content: '';
     position: fixed;
     inset:0;
-    background-color:#E4C2F2;
-    width:60% ;
+    background-color:#EBE1E4;
+    width:20% ;
     height: 100vh;
     clip-path: polygon(0 100%,0 0,100% 0,70% 100%);
     z-index : -1
   }
+  .body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-color: #EBE1E4;
+    width: 80%;
+    height: 100vh;
+    clip-path: polygon(0 100%, 0 0, 100% 0, 70% 100%);
+    z-index: -2;
+  }
+
+ 
 
  .login{
       position: fixed;
@@ -39,7 +74,7 @@ H3{
       border-radius: 1.25rem;
       border: 1px solid #ddd;
       box-shadow: 0 10px 50px -30px black;
-      background: #252126;
+      background: #DCC6C8 ;
       text-align: center;
   }
   
@@ -76,31 +111,35 @@ H3{
   }
   
   .login-form > input{
-    color: #fff;
+    color: #0E233B;
       width: 240px;
       background: transparent;
       border: 2px solid transparent;
-      border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+      border-bottom: 2px solid rgba(0, 0, 0, 0.112);
       font-size: 18px;
       padding: 0;
       text-align: center;
       transition: all 0.3s;
   }
-  
+
+  .login-form > input::placeholder{
+    color: #0e233bb0;
+  }
+
   .login-form > input:hover{
-      border-bottom: 2px solid #E4C2F2;
+      border-bottom: 2px solid #f03666;
   }
   
   .login-form > input:focus{
-      border-bottom: 2px solid #EEF280;
+      border-bottom: 2px solid #f03666;
   }
   
   .login-form > button{
       cursor: pointer;
       width: 100%;
       height: 56px;
-      background: #9B95BF;
-      color: #545454;
+      background: #f03666;
+      color: #ffffff;
       border: 0;
       border-radius: 10px;
       font-size: 1rem;
@@ -110,11 +149,11 @@ H3{
   }
   
   .login-form > button:hover{
-      background-color: #E4C2F2;
+      background-color: #f03666;
   }
   
   .login-form > a{
-      color: #acb949;
+      color: #f03666;
       font-size: 1rem;
       text-align: left;
       text-decoration: none;
@@ -122,8 +161,13 @@ H3{
   }
   
   .login-form > a:hover{
-      color: #EEF280;
+      color: #f03666;
   }
+  
+
+.login-form > a:hover{
+    color: #f03666;
+}
   
   @media (width >= 450px){
       .login{

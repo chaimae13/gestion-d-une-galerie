@@ -1,5 +1,5 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css");
-
+/*
 .add-images{
 min-height: 300px;
 background-color: white;
@@ -65,13 +65,15 @@ form >div{
     justify-content: center;
     align-items: center;
     background: rgba(0, 0, 0, 0.5); /* Background color for the overlay */
+    /*
     opacity: 0; /* Initially hidden */
+    /*
     transition: opacity 0.3s ease; /* Smooth transition effect */
-}
+/*}
 
 .gallerie_image:hover .icons {
     opacity: 1; /* Show icons when hovering over the image */
-}
+/*}
 
 .icons p a {
     color: white;
@@ -81,25 +83,51 @@ form >div{
 
 .delete-form {
     display: inline; /* Pour afficher le formulaire en ligne avec le texte */
-    margin: 0; /* Supprimez les marges par défaut du formulaire */
-}
+   /* margin: 0; /* Supprimez les marges par défaut du formulaire */
+/*}
 
 .delete-icon-button {
     background: none; /* Supprime l'arrière-plan du bouton */
-    border: none; /* Supprime les bordures du bouton */
-    color: white; 
-    cursor: pointer; /* Curseur de type pointeur au survol du bouton */
-    font-size: 16px; /* Taille du texte du bouton */
-    margin: 0; /* Supprimez les marges du bouton */
-    padding: 0; /* Supprimez le rembourrage du bouton */
-}
+   /* border: none;  Supprime les bordures du bouton */
+   /* color: white; 
+    cursor: pointer;  Curseur de type pointeur au survol du bouton */
+     /*font-size: 16px; Taille du texte du bouton */
+   /* margin: 0;  Supprimez les marges du bouton */
+   /* padding: 0;  Supprimez le rembourrage du bouton */
+/*}
 
 .delete-icon-button:hover {
     text-decoration: underline; /* Souligne le texte du bouton au survol */
-}
+/*}
 
 button > i {
      color: white;
 margin: 0 10px;
 text-decoration: none;
+}
+*/
+.icon-link {
+    display: inline-block;
+    margin-right: 10px; /* Adjust as needed to control spacing between icons */
+    color: #0e233bb0; /* Default color */
+    text-decoration: none;
+    transition: color 0.3s; /* Smooth color transition on hover */
+}
+
+.icon-link:hover {
+    color: #E63365; /* Color on hover */
+}
+
+.delete-icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    color: #0e233bb0; /* Default color */
+}
+
+.delete-icon-button:hover {
+    color: #E63365; /* Color on hover */
 }

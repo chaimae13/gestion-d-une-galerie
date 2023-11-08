@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Photo;
+use App\Models\theme;
 use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
@@ -32,6 +33,7 @@ class PhotoController extends Controller
         $photo->storeAs('photos', $photoName, 'public'); // This stores the file in the "storage/app/public/photos" directory
 
         $title = $request->input('title') ?? $photoName;
+        $themeId= $request->input('themeId');
     
         // Store the photo information in the database
         $user = auth()->user();
@@ -39,6 +41,7 @@ class PhotoController extends Controller
             'filename' => $title,
             'path' =>  $photoName,
             'user_id' => $user->id,
+            'theme_id'=>$themeId,
         ]);
         $photoRecord->save();
     
@@ -48,10 +51,25 @@ public function index()
 {
     // Récupérer l'utilisateur authentifié
     $user = auth()->user();
-
+    $themes = theme::all();
+    // $photos = Photo::all();
     // Charger la vue avec l'utilisateur et ses photos
-    return view('photos.index', compact('user'));
+    return view('photos.index', compact('user'), compact('themes'));
 }
+
+// public function index($themeId)
+// {
+//     $user = auth()->user();
+//     $themes = theme::all();
+
+//     if ($themeId == 0) {
+//         $photos = $user->photos;
+//     } else {
+//         $photos = $user->photos->where('theme_id', $themeId);
+//     }
+
+//     return view('photos.index', compact('photos'), compact('themes'));
+// }
 public function delete(Photo $photo)
 {
     
@@ -72,6 +90,7 @@ public function delete(Photo $photo)
 public function getHistograms(Photo $photo)
 {
     $filePath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path);
+    $path = '/storage/photos/' . $photo->path;
 
     $response = Http::post('http://127.0.0.1:5555/image', [
         'imagePath' => $filePath, // Replace with the actual image path
@@ -85,20 +104,17 @@ public function getHistograms(Photo $photo)
 
     $colors = json_decode($response2->getBody(), true)['hex_color_codes'];
 
-    return view('form', ['data' => $data, 'colors' => $colors]);
+    $response3 = Http::post('http://127.0.0.1:5580/momentColeur', [
+        'image_path' => $filePath, // Replace with the actual image path
+    ]);
+
+    $moment = $response3->json();
+    
+
+
+    return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $path]);
 
 }
 
-// public function showColors()
-//     {
-//           // Make a POST request to your Flask API
-//     $response = $client->post('http://127.0.0.1:5000/ColorDominant', [
-//         'json' => ['image_path' => 'C:/Users/hp/Pictures/hey.jpeg'],
-//     ]);
 
-//     // Extract the color codes from the API response
-//     $colors = json_decode($response->getBody(), true)['hex_color_codes'];
-
-//     return view('form', ['colors' => $colors]);
-// }
 }

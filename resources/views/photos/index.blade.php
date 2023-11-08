@@ -3,7 +3,6 @@
 <head>
     <link rel="stylesheet" href="{{asset('css/gallery.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
 
 </head>
 @section('content')
@@ -18,7 +17,7 @@
                     <input type="text" name="title">
                 </div>
                 <div>
-                <option value disabled selected>--Select Theme --</option>
+                <label for="themeId">Sélectionnez un thème:</label>
                  <select name="themeId" id="themeId">
                  @foreach($themes as $theme)
                      <option value="{{ $theme->id }}">{{ $theme->nom }}</option>
@@ -46,10 +45,8 @@
         </form>
         </div>
  </div>
-<div style="background-color:gray;"></div>
+ <label for="Showtheme">Sélectionnez un thème:</label>
                  <select name="Showtheme" id="Showtheme">
-                 <option value disabled selected>--Select Theme --</option>
-
                  @foreach($themes as $theme)
                      <option value="{{ $theme->id }}">{{ $theme->nom }}</option>
                  @endforeach
@@ -58,9 +55,8 @@
     <!-- Affichage des Photos de l'Utilisateur -->
     <div class="show-images">
         <!-- <h2>Mes Photos</h2> -->
-        @foreach ($photos as $photo)
+        @foreach ($user->photos as $photo)
             <div class="gallerie">
-            <div class="gallerie theme-{{ $photo->themeId }}">
                 <div class="gallerie_image">
                     <img src="{{ asset('/storage/photos/' . $photo->path) }}" alt="Photo">
                     <div class="icons">
@@ -84,32 +80,4 @@
             
      
     </div>
-    </div>
-
-    <script>
-    // Wrap the JavaScript code in a DOMContentLoaded event listener
-    document.addEventListener('DOMContentLoaded', function() {
-        const showThemeSelect = document.getElementById('Showtheme');
-
-        showThemeSelect.addEventListener('change', function () {
-            const selectedThemeId = this.value;
-            const allImages = document.querySelectorAll('.gallerie');
-
-            if (selectedThemeId === '') {
-                allImages.forEach(image => {
-                    image.style.display = 'block';
-                });
-            } else {
-                allImages.forEach(image => {
-                    image.style.display = 'none';
-                });
-
-                const selectedThemeImages = document.querySelectorAll('.theme-' + selectedThemeId);
-                selectedThemeImages.forEach(image => {
-                    image.style.display = 'block';
-                });
-            }
-        });
-    });
-</script>
 @endsection

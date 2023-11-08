@@ -37,5 +37,6 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/getHistograms/{photo}',[PhotoController::class,'getHistograms'])->name('getHistograms');
 Route::post('/themes', [ThemeController::class,'add']);
+// Route::get('/getImagesByTheme/{themeId}', [PhotoController::class,'getImagesByTheme']);
 
 

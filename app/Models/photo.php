@@ -9,7 +9,7 @@ use Psy\Output\Theme;
 class photo extends Model
 {
     protected $fillable = [
-        'filename', 'path','cloud_url', 'user_id',
+        'filename', 'path','cloud_url', 'user_id','theme_id',
     ];
 
     public function user()

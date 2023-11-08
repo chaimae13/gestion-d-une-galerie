@@ -3,6 +3,8 @@
 use App\Http\Controllers\AutheManager;
 use App\Http\Controllers\GetApi;
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\Theme;
+use App\Http\Controllers\ThemeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('form');
+    return view('header');
 })->name('home');;
 
 Route::get('/login', [AutheManager::class,'login'])->name('login');
@@ -32,9 +34,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/gallery/{photo}', [PhotoController::class, 'delete'])->name('photo.delete');
 });
 
-
-// Route::get('/ColorDominant',[PhotoController::class, 'showColors']);
 Route::get('/getHistograms/{photo}',[PhotoController::class,'getHistograms'])->name('getHistograms');
-// Route::get('/getHistograms1',[GetApi::class,'getHistograms']);
+Route::post('/themes', [ThemeController::class,'add']);
+// Route::get('/getImagesByTheme/{themeId}', [PhotoController::class,'getImagesByTheme']);
 
 

@@ -185,4 +185,8 @@ H3{
       .login{
           width: 25%;
       }
+
+    h3{
+        font-weight:400;
+    }
   }

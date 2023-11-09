@@ -1,26 +1,60 @@
+
 @extends('layout')
 @section('title', 'home page')
 <head>
     <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+  .slideout-overlay {
+background-color: rgba(215, 219, 221, 0.5);
+}
+</style>
 </head>
 @section('content')
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8" >
-            <div class="card" style="background-color:#F9F6F5">
-                <div class="card-title mt-3">
-                    <h1 class="text-center">Ajouter une image</h1>
-                </div>
-                <form method="POST" action="/themes">
-             @csrf
-            <label for="nom">Ajouter Theme</label>
-            <input type="text" name="nom" id="nom" required>
-            <button type="submit">Ajouter</button>
-        </form>
 
-                <div class="card-body">
-                    <form action="/gallery" method="post" enctype="multipart/form-data">
+<div class="container mt-3">
+    
+    <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Add photo</button>
+    
+    <a class="btn btn-dark" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+        Add Theme
+    </a>
+    <div class="btn">
+        <select class="form-select" name="Showtheme" id="Showtheme">
+            <option value="" selected>View All</option>
+            @foreach($themes as $theme)
+                <option value="{{ $theme->id }}">{{ $theme->nom }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+    
+<div class="offcanvas offcanvas-start  " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Ajouter Theme</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+  <form method="POST" action="/themes">
+             @csrf
+            <label class="form-label" for="nom">Ajouter Theme</label>
+            <input class="form-control" type="text" name="nom" id="nom" required>
+            <button class="btn btn-dark" type="submit">Ajouter</button>
+        </form>
+  </div>
+</div>
+
+
+
+    <div class="offcanvas offcanvas-start " data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Ajouter image</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+                 <form action="/gallery" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="title" class="form-label">Nom de la photo</label>
@@ -31,31 +65,27 @@
                             <input type="file" class="form-control" name="photo" required>
                         </div>
                         <div class="mb-3">
-                          <option  style="color: black; padding: 10px;" disabled selected>Select Theme</option>
-                           <select style="width: 100px;" name="themeId" id="themeId">
+                            <select class="form-select" name="themeId" id="themeId">
+                          <option class="form-label" disabled selected>Select Theme</option>
                            @foreach($themes as $theme)
                                <option value="{{ $theme->id }}">{{ $theme->nom }}</option>
                            @endforeach
                            </select>
                            </div>
+                           
+                        <div class="dropdown-center">
+
                         <button type="submit" class="btn btn-dark" name="addimage">Ajouter la Photo</button>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row justify-content-center mt-4">
-    <div style="background-color: gray;">
-        <select name="Showtheme" id="Showtheme">
-            <option value="" selected>View All</option>
-            @foreach($themes as $theme)
-                <option value="{{ $theme->id }}">{{ $theme->nom }}</option>
-            @endforeach
-        </select>
-    </div>
+                        </div>
+         </div>
 </div>
 
-<div class="row justify-content-center mt-4" id="photoGallery">
+
+
+
+<div class="container mt-5">
+<div class="row justify-content-center mt-5" id="photoGallery">
     @foreach ($user->photos as $photo)
         <div class="col-md-4 mb-4" data-theme="{{ $photo->theme_id }}">
             <div class="card">
@@ -80,8 +110,10 @@
         </div>
     @endforeach
 </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function () {
         $('#Showtheme').change(function () {
@@ -98,3 +130,4 @@
     });
 </script>
 @endsection
+

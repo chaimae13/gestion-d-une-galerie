@@ -23,12 +23,26 @@
                             <label for="photo" class="form-label">Choisir une photo</label>
                             <input type="file" class="form-control" name="photo" required>
                         </div>
+                        <div class="mb-3">
+                          <option  style="color: black; padding: 10px;" disabled selected>Select Theme</option>
+                           <select style="width: 100px;" name="themeId" id="themeId">
+                           @foreach($themes as $theme)
+                               <option value="{{ $theme->id }}">{{ $theme->nom }}</option>
+                           @endforeach
+                           </select>
+                           </div>
                         <button type="submit" class="btn btn-dark" name="addimage">Ajouter la Photo</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <form method="POST" action="/themes">
+             @csrf
+            <label for="nom">Ajouter Theme</label>
+            <input type="text" name="nom" id="nom" required>
+            <button type="submit">Ajouter</button>
+        </form>
 
     <div class="row justify-content-center mt-4">
         @foreach ($user->photos as $photo)

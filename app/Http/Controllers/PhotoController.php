@@ -52,8 +52,7 @@ public function index()
     // Récupérer l'utilisateur authentifié
     $user = auth()->user();
     $themes = theme::all();
-    // $photos = Photo::all();
-    // Charger la vue avec l'utilisateur et ses photos
+
     return view('photos.index', compact('user'), compact('themes'));
 }
 

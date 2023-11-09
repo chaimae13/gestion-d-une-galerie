@@ -7,8 +7,9 @@ use App\Models\Photo;
 use App\Models\theme;
 use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
-
+use Image;
 
 
 class PhotoController extends Controller
@@ -56,6 +57,58 @@ public function index()
     // Charger la vue avec l'utilisateur et ses photos
     return view('photos.index', compact('photos'), compact('themes'));
 }
+
+
+
+
+public function edit($id)
+{
+    $photo = Photo::find($id);
+    return view('photos.edit', compact('photo'));
+}
+
+
+public function update(Request $request, $id)
+{
+    // Récupérez la photo à partir de l'ID
+    $photo = Photo::find($id);
+
+    // Récupérez les coordonnées de recadrage de la requête
+    $x = intval($request->input('x'));
+    $y = intval($request->input('y'));
+    $width = intval($request->input('width'));
+    $height = intval($request->input('height'));
+
+    if ($width <= 0 || $height <= 0) {
+        return redirect('/gallery')->with("error", "Width and height of cutout needs to be defined.");
+    }
+
+    // Chemin vers l'image d'origine
+    $originalImagePath = public_path('storage/photos/' . $photo->path);
+ 
+    
+    // Chargez l'image d'origine
+    $image = \Intervention\Image\Facades\Image::make($originalImagePath);
+
+    // Recadrez l'image en utilisant les coordonnées fournies
+    $image->crop($width, $height, $x, $y);
+
+    // Enregistrez la nouvelle version de l'image recadrée
+    $croppedImagePath = public_path('storage/photos/cropped_' . $photo->path);
+    $image->save($croppedImagePath);
+
+    // Mettez à jour le chemin de l'image dans la base de données
+    $photo->path = 'cropped_' . $photo->path;
+    $photo->save();
+
+    // Supprimez l'ancienne image d'origine si nécessaire
+    // File::delete($originalImagePath);
+
+    // Redirigez l'utilisateur après l'édition de l'image
+    return redirect('/gallery')->with('success', 'Photo éditée avec succès.');
+}
+
+
 public function delete(Photo $photo)
 {
     

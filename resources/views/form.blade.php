@@ -21,6 +21,9 @@
         }
         
     </style>
+    <title>Image</title>
+    <link rel="shortcut icon" href="{{ asset('images/camera.png') }}">
+
 </head>
 <body>
 <div style="display: flex; flex-direction: row;">

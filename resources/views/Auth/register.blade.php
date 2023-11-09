@@ -6,6 +6,10 @@
         <title>@yield('title', 'Laravel Project')</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link href="  {{asset('css/login.css')}}" rel="stylesheet">
+    <title>Register</title>
+    <link rel="shortcut icon" href="{{ asset('images/camera.png') }}">
+
+
     </head>
 <div class="body container">
         <div class="mt-5">

@@ -1,6 +1,6 @@
 
 @extends('layout')
-@section('title', 'home page')
+@section('title', 'Gallery')
 <head>
     <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

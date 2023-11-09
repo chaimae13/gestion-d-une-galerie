@@ -26,7 +26,7 @@ Route::get('/logout', [AutheManager::class,'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [AutheManager::class,'home'])->name('welcome');
-    Route::get('/gallery', [PhotoController::class, 'index'])->name('gallery')->name('gallery');
+    Route::get('/gallery', [PhotoController::class, 'index'])->name('gallery');
     Route::post('/gallery', [PhotoController::class, 'upload']);
     Route::delete('/gallery/{photo}', [PhotoController::class, 'delete'])->name('photo.delete');
 });

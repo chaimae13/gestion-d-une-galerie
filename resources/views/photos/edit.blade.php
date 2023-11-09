@@ -16,15 +16,16 @@
                 <button id="crop-btn" class="btn btn-primary">Recadrer</button>
             </div>
         </div> -->
-
-        <div class="container">
-        <h2>Édition de la photo</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <img id="myimage" src="{{ asset('/storage/photos/' . $photo->path) }}" alt="Photo à éditer">
+<div style="display: flex; flex-direction: row;">
+        <div>
+        <h2 style="padding: 20px;">Édition de la photo</h2>
+            <div style="width: 90%;">
+                <img id="myimage" src="{{ asset('/storage/photos/' . $photo->path) }}" alt="Photo à éditer" style=" max-width: fit-content;">
             </div>
-            <div class="col-md-6">
-                <h4>Recadrez votre photo</h4>
+        </div>
+
+        <div>
+                <h4 style="padding: 20px;">Recadrez votre photo</h4>
                 <div id="cropper"></div>
                 <form id="crop-form" action="{{ route('photo.update', $photo->id) }}" method="POST" enctype="multipart/form-data">
     <!-- Champ d'envoi de l'image encadrée -->
@@ -35,12 +36,10 @@
     <input type="hidden" name="width" id="width">
     <input type="hidden" name="height" id="height">
     {{ csrf_field() }}
-    <button type="submit" id="crop-btn" class="btn btn-primary">Enregistrer</button>
+    <button type="submit" id="crop-btn" class="btn btn-primary"  style=" position: absolute; bottom:0; margin: 30px;">Enregistrer</button>
 </form>
-            </div>
-        </div>
-    </div>
-    <!-- </div> -->
+            </div>        
+</div>
 
     <script>
      document.addEventListener('DOMContentLoaded', function() {

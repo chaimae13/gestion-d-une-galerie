@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -6,25 +5,68 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .container {
-            margin-top: 50px;
-            width: 50%;
+            width: 95%;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
         }
         
     </style>
+    <title>Image</title>
+    <link rel="shortcut icon" href="{{ asset('images/camera.png') }}">
+
 </head>
 <body>
-<div style="display: flex;">
+<div style="display: flex; flex-direction: row;">
+    <div>
+    <img src="{{ $path }}" alt="Image" style="width: 90%;" />
+
+    </div>
+<div style="display: flex; flex-direction: column;">
+<div style="display: flex; flex-direction: row;">
+<div>
+<h2>Couleurs Dominant</h2>
+<div style="display: flex; margin-left: 10px;width: 90%;">
     @foreach ($colors as $color)
-        <div style="width: 100px; height: 100px; background-color: {{ $color }};">
+        <div style="width: 80px; height: 80px; background-color: {{ $color }};">
         <p>{{ $color }}</p>
         </div>
     @endforeach
+</div></div>
+<div style="width: 90%;">
+<h2>Moments de Couleur</h2>
+    <table>
+        <tr>
+            <th>Caractéristique</th>
+            <th>Valeur</th>
+        </tr>
+        @foreach($moment as $key => $value)
+            <tr>
+                <td>{{ $key }}</td>
+                <td>{{ $value }}</td>
+            </tr>
+        @endforeach
+    </table>
+</div>
 </div>
 
-<h1>Histogram Charts</h1>
     <div class="container">
+    <h1>Histogram Charts</h1>
+
         <canvas id="combinedCanvas"></canvas>
     </div>
+
+    </div></div>
+
     <script>
     var histogramData = <?php echo json_encode($data); ?>;
     console.log('histogramData:', histogramData);
@@ -67,7 +109,6 @@ console.log('histogramData.histogram1:', histogramData.histogram1);
         console.error('Data is not in the expected format.');
     }
 </script>
-
 
 </body>
 </html>

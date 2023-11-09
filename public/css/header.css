@@ -11,21 +11,10 @@
 }
 body{
     min-height: 100vh;
-    background: linear-gradient(to top right, #E9BCEF, #F8B8E5, #B7ACE0, #B0A4DD, #8BA8D6);
+    background-color: #fbfbfbbe;
 
 }
-.header{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px 100px; 
-    /* background-color: red; */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 100%;
-}
+
 .logo{
                    
     width: 90px;
@@ -34,7 +23,7 @@ body{
 .navbar a {
     position: relative;
     font-size: 18px;
-    color: white;
+    color: #0e233bb0;
     font-weight: 500;
     text-decoration: none;
     margin-left: 40px;
@@ -46,9 +35,13 @@ body{
     left: 0;
     width: 0;
     height: 2px;
-    background: white;
+    background: #E63365;
     transition: .2s;
 }
 .navbar a:hover::before {
     width: 100%;
+    color: white;
+}
+a:hover{
+    color: white;;
 }

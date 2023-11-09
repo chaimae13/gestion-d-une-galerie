@@ -52,4 +52,4 @@ def ColorDominant():
     return jsonify({'hex_color_codes': hex_color_codes})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

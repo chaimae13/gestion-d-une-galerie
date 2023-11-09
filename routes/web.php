@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [AutheManager::class,'home'])->name('welcome');;
 Route::get('/login', [AutheManager::class,'login'])->name('login');
 Route::post('/login', [AutheManager::class,'loginPost'])->name('login.post');
 Route::get('/register', [AutheManager::class,'register'])->name('register');
@@ -26,6 +25,7 @@ Route::post('/register', [AutheManager::class,'registerPost'])->name('register.p
 Route::get('/logout', [AutheManager::class,'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', [AutheManager::class,'home'])->name('welcome');
     Route::get('/gallery', [PhotoController::class, 'index'])->name('gallery');
     Route::post('/gallery', [PhotoController::class, 'upload']);
     Route::delete('/gallery/{photo}', [PhotoController::class, 'delete'])->name('photo.delete');

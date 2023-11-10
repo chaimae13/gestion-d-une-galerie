@@ -93,7 +93,7 @@ background-color: rgba(215, 219, 221, 0.5);
                     <img src="{{ asset('/storage/photos/' . $photo->path) }}" class="card-img-top" alt="Photo">
                 </a>
                 <div class="card-body">
-                    <div class="icons text-center">
+                    <div class="icons text-center" style="display: flex; justify-content: center;">
                         <p>
                             <a href="{{ route('photo.edit', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-edit"></i></a>
                             <a href="{{ route('getHistograms', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-link"></i></a>

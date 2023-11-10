@@ -48,6 +48,7 @@ class PhotoController extends Controller
     
         return redirect('/gallery')->with('success', 'Photo ajoutée avec succès.');
 }
+
 public function index()
 {
     // Récupérer l'utilisateur authentifié
@@ -56,22 +57,6 @@ public function index()
 
     return view('photos.index', compact('user'), compact('themes'));
 }
-
-// public function index($themeId)
-// {
-//     $user = auth()->user();
-//     $themes = theme::all();
-
-//     if ($themeId == 0) {
-//         $photos = $user->photos;
-//     } else {
-//         $photos = $user->photos->where('theme_id', $themeId);
-//     }
-
-//     return view('photos.index', compact('photos'), compact('themes'));
-// }
-
-
 
 
 public function edit($id)

@@ -94,8 +94,14 @@ public function update(Request $request, $id)
     $image->save($croppedImagePath);
 
     // Mettre à jour le chemin de l'image dans la base de données
-    $photo->path = 'cropped_' . $photo->path;
-    $photo->save();
+    // $photo->path = 'cropped_' . $photo->path;
+    // $photo->save();
+
+    $newPhoto = new Photo();
+    $newPhoto->path = 'cropped_'. $photo->path;
+    $newPhoto->filename = $photo->filename;
+    $newPhoto->user_id = $photo->user_id ;
+    $newPhoto->save();
 
     // Supprimer l'ancienne image d'origine 
     // File::delete($originalImagePath);

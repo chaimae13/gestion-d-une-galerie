@@ -34,6 +34,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
    
 
-    <!-- Your additional scripts -->
 </body>
 </html>

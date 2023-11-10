@@ -29,8 +29,6 @@ class PhotoController extends Controller
         $photo = $request->file('photo');
         $photoName = $photo->getClientOriginalName();
 
-    
-        // Move the uploaded file to the storage directory
         $photo->storeAs('photos', $photoName, 'public'); // This stores the file in the "storage/app/public/photos" directory
 
         $title = $request->input('title') ?? $photoName;
@@ -85,31 +83,31 @@ public function update(Request $request, $id)
     $originalImagePath = public_path('storage/photos/' . $photo->path);
  
     
-    // Chargez l'image d'origine
+    // Charger l'image d'origine
     $image = \Intervention\Image\Facades\Image::make($originalImagePath);
 
-    // Recadrez l'image en utilisant les coordonnées fournies
+    // Recadrer l'image 
     $image->crop($width, $height, $x, $y);
 
-    // Enregistrez la nouvelle version de l'image recadrée
+    // Enregistrer la nouvelle version de l'image recadrée
     $croppedImagePath = public_path('storage/photos/cropped_' . $photo->path);
     $image->save($croppedImagePath);
 
-    // Mettez à jour le chemin de l'image dans la base de données
+    // Mettre à jour le chemin de l'image dans la base de données
     $photo->path = 'cropped_' . $photo->path;
     $photo->save();
 
-    // Supprimez l'ancienne image d'origine si nécessaire
+    // Supprimer l'ancienne image d'origine 
     // File::delete($originalImagePath);
 
-    // Redirigez l'utilisateur après l'édition de l'image
+    // Rediriger l'utilisateur après l'édition de l'image
     return redirect('/gallery')->with('success', 'Photo éditée avec succès.');
 }
 
 public function changeScale(Request $request, $id)
     {
         $photo = Photo::find($id);
-        // Validez les données du formulaire
+        // Valider les données du formulaire
         $request->validate([
             'scaleFactor' => 'required|numeric',
         ]);
@@ -118,22 +116,22 @@ public function changeScale(Request $request, $id)
     $originalImagePath = public_path('storage/photos/' . $photo->path);
  
     
-      // Chargez l'image d'origine
+      // Charger l'image d'origine
       $image = \Intervention\Image\Facades\Image::make($originalImagePath);
 
 
-        // Récupérez le facteur d'échelle du formulaire
+        // Récupérer le facteur d'échelle du formulaire
         $scaleFactor = $request->input('scaleFactor');
 
-        // Appliquez le changement d'échelle
+        // Appliquer le changement d'échelle
         $scaledImage =  $image->resize($image->width() * $scaleFactor, $image->height() * $scaleFactor);
 
-         // Enregistrez la nouvelle version de l'image  dans le storage
+         // Enregistrer la nouvelle version de l'image  dans le storage
     $scaledImagePath = public_path('storage/photos/scaled_' . $photo->path);
     $scaledImage->save($scaledImagePath);
     
 
-    // Créez un nouvel enregistrement dans la base de données pour la version échelonnée
+    // Créer un nouvel enregistrement dans la base de données pour la version échelonnée
     $newPhoto = new Photo();
     $newPhoto->path = 'scaled_'. $photo->path;
     $newPhoto->filename = $photo->filename;
@@ -148,10 +146,10 @@ public function delete(Photo $photo)
     $filePath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path);
 
         
-    // Check if the file exists before attempting to delete
+    // Check if the file exists before delete
     if (file_exists($filePath)) {
-        unlink($filePath); // Supprime le fichier
-        $photo->delete();  // Supprime l'enregistrement de la base de données
+        unlink($filePath); // Supprimer le fichier
+        $photo->delete();  // Supprimer l'enregistrement de la base de données
         return redirect('/gallery')->with('success', 'Photo supprimée avec succès.');
     } else {
         dd('File not found: ' . $filePath);
@@ -165,7 +163,7 @@ public function getHistograms(Photo $photo)
     $path = '/storage/photos/' . $photo->path;
 
     $response = Http::post('http://127.0.0.1:5555/image', [
-        'imagePath' => $filePath, // Replace with the actual image path
+        'imagePath' => $filePath, 
     ]);
 
     $data = $response->json();
@@ -177,7 +175,7 @@ public function getHistograms(Photo $photo)
     $colors = json_decode($response2->getBody(), true)['hex_color_codes'];
 
     $response3 = Http::post('http://127.0.0.1:5580/momentColeur', [
-        'image_path' => $filePath, // Replace with the actual image path
+        'image_path' => $filePath, 
     ]);
 
     $moment = $response3->json();

@@ -22,6 +22,7 @@
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
     padding-top: 60px;
+    
 }
 
 .modal-content {
@@ -46,6 +47,10 @@
     cursor: pointer;
 }
 
+.mycolor{
+   color: #0e233bb0;
+}
+
     </style>
 
 </head>
@@ -53,17 +58,17 @@
 
 @section('content')
     <div class="container">
-        <h2>Édition de la photo</h2>
+        <h2 class="mt-3 mycolor">Édition de la photo</h2>
         <div class="row">
             <div class="col-md-6">
                 <img id="myimage" src="{{ asset('/storage/photos/' . $photo->path) }}" alt="Photo à éditer">
             </div>
             <div class="col-md-6">
-                <h4>Options d'édition</h4>
+                <h4 class="mycolor">Options d'édition</h4>
                 <!-- Boutons -->
-                <button id="crop-btn" class="btn btn-primary">Crop</button>
-                <button id="change-scale-btn" class="btn btn-primary">Change Scale</button>
-                <button  class="btn btn-primary">Changer en Gris</button>
+                <button id="crop-btn" class="btn btn-dark">Crop</button>
+                <button id="change-scale-btn" class="btn btn-dark">Change Scale</button>
+                <!-- <button  class="btn btn-primary">Changer en Gris</button> -->
                 <!-- Formulaire de recadrage -->
                 <form id="crop-form" action="{{ route('photo.update', $photo->id) }}" method="POST" enctype="multipart/form-data">
                     <!-- Champ d'envoi de l'image encadrée -->
@@ -74,7 +79,7 @@
                     <input type="hidden" name="width" id="width">
                     <input type="hidden" name="height" id="height">
                     {{ csrf_field() }}
-                    <button type="submit" id="enre" class="btn btn-primary">Enregistrer</button>
+                    <button type="submit" id="enre" class="btn btn-dark" style=" position: absolute; bottom:10vh;">Enregistrer</button>
                 </form>
             </div>
         </div>

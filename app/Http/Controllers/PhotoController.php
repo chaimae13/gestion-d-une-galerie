@@ -121,7 +121,42 @@ public function update(Request $request, $id)
     return redirect('/gallery')->with('success', 'Photo éditée avec succès.');
 }
 
+public function changeScale(Request $request, $id)
+    {
+        $photo = Photo::find($id);
+        // Validez les données du formulaire
+        $request->validate([
+            'scaleFactor' => 'required|numeric',
+        ]);
 
+         // Chemin vers l'image d'origine
+    $originalImagePath = public_path('storage/photos/' . $photo->path);
+ 
+    
+      // Chargez l'image d'origine
+      $image = \Intervention\Image\Facades\Image::make($originalImagePath);
+
+
+        // Récupérez le facteur d'échelle du formulaire
+        $scaleFactor = $request->input('scaleFactor');
+
+        // Appliquez le changement d'échelle
+        $scaledImage =  $image->resize($image->width() * $scaleFactor, $image->height() * $scaleFactor);
+
+         // Enregistrez la nouvelle version de l'image  dans le storage
+    $scaledImagePath = public_path('storage/photos/scaled_' . $photo->path);
+    $scaledImage->save($scaledImagePath);
+    
+
+    // Créez un nouvel enregistrement dans la base de données pour la version échelonnée
+    $newPhoto = new Photo();
+    $newPhoto->path = 'scaled_'. $photo->path;
+    $newPhoto->filename = $photo->filename;
+    $newPhoto->user_id = $photo->user_id ;
+    $newPhoto->save();
+       
+    return redirect('/gallery')->with('success', 'Photo éditée avec succès.');
+    }
 public function delete(Photo $photo)
 {
     

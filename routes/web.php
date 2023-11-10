@@ -26,7 +26,7 @@ Route::get('/logout', [AutheManager::class,'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [AutheManager::class,'home'])->name('welcome');
-    Route::get('/gallery', [PhotoController::class, 'index'])->name('gallery')->name('gallery');
+    Route::get('/gallery', [PhotoController::class, 'index'])->name('gallery');
     Route::post('/gallery', [PhotoController::class, 'upload']);
     Route::delete('/gallery/{photo}', [PhotoController::class, 'delete'])->name('photo.delete');
 });
@@ -37,5 +37,6 @@ Route::post('/themes', [ThemeController::class,'add']);
 
 Route::get('/editer-photo/{id}',[PhotoController::class,'edit'])->name('photo.edit');
 Route::post('/photos/{id}/update', [PhotoController::class,'update'])->name('photo.update');
+Route::post('/photo/{id}/change-scale', [PhotoController::class,'changeScale'])->name('photo.changeScale');
 
 

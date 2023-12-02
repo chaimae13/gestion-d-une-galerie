@@ -58,7 +58,37 @@ public function getHistograms(Photo $photo)
     Storage::put('json_data/' . $jsonFileName, $jsonContent);
 
 
-    // return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $path]);
+   
+
+}
+
+public function viewJSON($photo_id){
+    
+    $filename = 'json_data/photo_data_' . $photo_id.'.json';
+
+    // Vérifiez si le fichier existe dans le répertoire storage
+    if (Storage::exists($filename)) {
+        // Lisez le contenu du fichier
+        $content = Storage::get($filename);
+
+        $jsonData = json_decode($content, true);
+
+        // Vérifiez si le décodage a réussi
+        if ($jsonData === null) {
+            return response()->json(['error' => 'Erreur de décodage JSON'], 500);
+        }
+        $data = $jsonData['data'];
+        $colors =  $jsonData['colors'];
+
+        $moment =  $jsonData['moment'];
+        $path =  $jsonData['path'];
+
+        return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $path]);
+    } else {
+        // Retournez une réponse en cas d'erreur (par exemple, le fichier n'existe pas)
+        return response()->json(['error' => 'Fichier non trouvé'], 404);
+    }
+  
 
 }
     public function upload(Request $request)

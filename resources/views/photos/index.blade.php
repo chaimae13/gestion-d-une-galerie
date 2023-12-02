@@ -56,10 +56,6 @@ background-color: rgba(215, 219, 221, 0.5);
         <div class="offcanvas-body">
                  <form action="/gallery" method="post" enctype="multipart/form-data">
                         @csrf
-                        <!-- <div class="mb-3">
-                            <label for="title" class="form-label">Nom de la photo</label>
-                            <input type="text" class="form-control" name="title">
-                        </div> -->
                         <div class="mb-3">
                             <label for="photo" class="form-label">Choisir des photos</label>
                             <input type="file" class="form-control" name="photos[]"  multiple required>
@@ -96,7 +92,7 @@ background-color: rgba(215, 219, 221, 0.5);
                     <div class="icons text-center" style="display: flex; justify-content: center;">
                         <p>
                             <a href="{{ route('photo.edit', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-edit"></i></a>
-                            <a href="{{ route('getHistograms', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-link"></i></a>
+                            <a href="{{ route('getInfo', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-link"></i></a>
                             <a href="{{ asset('/storage/photos/' . $photo->path) }}" download class="icon-link d-inline"><i class="fa fa-download"></i></a>
                             <form action="{{ route('photo.delete', $photo->id) }}" method="post" class="delete-form d-inline">
                                 @csrf

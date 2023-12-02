@@ -31,7 +31,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/gallery/{photo}', [PhotoController::class, 'delete'])->name('photo.delete');
 });
 
-Route::get('/getHistograms/{photo}',[PhotoController::class,'getHistograms'])->name('getHistograms');
+
+Route::get('/getInfo/{photo_id}', [PhotoController::class, 'viewJSON'])->name('getInfo');
 Route::post('/themes', [ThemeController::class,'add']);
 // Route::get('/getImagesByTheme/{themeId}', [PhotoController::class,'getImagesByTheme']);
 

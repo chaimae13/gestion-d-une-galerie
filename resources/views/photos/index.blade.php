@@ -85,6 +85,12 @@ background-color: rgba(215, 219, 221, 0.5);
     @foreach ($user->photos as $photo)
         <div class="col-md-4 mb-4" data-theme="{{ $photo->theme_id }}">
             <div class="card">
+                <div class="ml-2">
+                        <input class="" type="checkbox" value="{{ $photo->id }}" id="checkbox{{ $photo->id }}">
+                        <label class="" for="checkbox{{ $photo->id }}">
+                            Select
+                        </label>
+                    </div>
                 <a href="{{ asset('/storage/photos/' . $photo->path) }}" target="_blank">
                     <img src="{{ asset('/storage/photos/' . $photo->path) }}" class="card-img-top" alt="Photo">
                 </a>
@@ -106,6 +112,9 @@ background-color: rgba(215, 219, 221, 0.5);
         </div>
     @endforeach
 </div>
+<div class="mt-3">
+        <button type="button" class="btn btn-dark" onclick="performAction()">Perform Action on Selected</button>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -124,6 +133,19 @@ background-color: rgba(215, 219, 221, 0.5);
             });
         });
     });
+
+    function performAction() {
+        var selectedPhotoIds = [];
+
+        // Iterate through the checkboxes to find selected ones
+        $('input[type="checkbox"]:checked').each(function () {
+            selectedPhotoIds.push($(this).val());
+        });
+
+        // Log the selected photo ids (you can perform your desired action here)
+        console.log(selectedPhotoIds);
+        alert('Perform your action on selected photos: ' + selectedPhotoIds.join(', '));
+    }
 </script>
 @endsection
 

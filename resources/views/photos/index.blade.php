@@ -56,13 +56,13 @@ background-color: rgba(215, 219, 221, 0.5);
         <div class="offcanvas-body">
                  <form action="/gallery" method="post" enctype="multipart/form-data">
                         @csrf
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="title" class="form-label">Nom de la photo</label>
                             <input type="text" class="form-control" name="title">
-                        </div>
+                        </div> -->
                         <div class="mb-3">
-                            <label for="photo" class="form-label">Choisir une photo</label>
-                            <input type="file" class="form-control" name="photo" required>
+                            <label for="photo" class="form-label">Choisir des photos</label>
+                            <input type="file" class="form-control" name="photos[]"  multiple required>
                         </div>
                         <div class="mb-3">
                             <select class="form-select" name="themeId" id="themeId">
@@ -75,7 +75,7 @@ background-color: rgba(215, 219, 221, 0.5);
                            
                         <div class="dropdown-center">
 
-                        <button type="submit" class="btn btn-dark" name="addimage">Ajouter la Photo</button>
+                        <button type="submit" class="btn btn-dark" name="addimage">Ajouter les Photos</button>
                     </form>
                         </div>
          </div>

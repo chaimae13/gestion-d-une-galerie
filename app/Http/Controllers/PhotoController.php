@@ -19,33 +19,88 @@ class PhotoController extends Controller
 {
     $this->middleware('auth');
 }
+public function getHistograms(Photo $photo)
+{
+    $filePath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path);
+    $path = '/storage/photos/' . $photo->path;
+
+    $response = Http::post('http://127.0.0.1:5555/image', [
+        'imagePath' => $filePath, 
+    ]);
+
+    $data = $response->json();
+    
+    $response2 = Http::post('http://127.0.0.1:5000/ColorDominant', [
+        'image_path' =>  $filePath,
+    ]);
+
+    $colors = json_decode($response2->getBody(), true)['hex_color_codes'];
+
+    $response3 = Http::post('http://127.0.0.1:5580/momentColeur', [
+        'image_path' => $filePath, 
+    ]);
+
+    $moment = $response3->json();
+    
+        //  array with the data
+        $jsonData = [
+            'data' => $data,
+            'colors' => $colors,
+            'moment' => $moment,
+            'path' => $path,
+        ];
+    
+         // Convert the array to JSON format
+    $jsonContent = json_encode($jsonData, JSON_PRETTY_PRINT);
+
+    // Store the JSON content in a file
+    $jsonFileName = 'photo_data_' . $photo->id . '.json';
+    Storage::put('json_data/' . $jsonFileName, $jsonContent);
+
+
+    // return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $path]);
+
+}
     public function upload(Request $request)
     {
         $request->validate([
-            'title' => 'nullable|string|max:255',
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        
+            'themeId' => 'required',
         ]);
     
-        $photo = $request->file('photo');
+
+
+            // Process each uploaded file
+
+            $user = auth()->user();
+    foreach ($request->file('photos') as $photo) {
         $photoName = $photo->getClientOriginalName();
 
-        $photo->storeAs('photos', $photoName, 'public'); // This stores the file in the "storage/app/public/photos" directory
+        $photo->storeAs('photos', $photoName, 'public');
 
-        $title = $request->input('title') ?? $photoName;
-        $themeId= $request->input('themeId');
-    
+        $title = pathinfo($photoName, PATHINFO_FILENAME);
+        // $title = $request->input('title') ?? $photoName;
+        // $title = $photoName;         
+        $themeId = $request->input('themeId');
+
+      
+
         // Store the photo information in the database
-        $user = auth()->user();
         $photoRecord = new Photo([
             'filename' => $title,
-            'path' =>  $photoName,
+            'path' => $photoName,
             'user_id' => $user->id,
-            'theme_id'=>$themeId,
+            'theme_id' => $themeId,
         ]);
+
         $photoRecord->save();
+        $this->getHistograms($photoRecord);
+        
+    }
+
     
         return redirect('/gallery')->with('success', 'Photo ajoutée avec succès.');
-}
+    }
 
 public function index()
 {
@@ -163,34 +218,7 @@ public function delete(Photo $photo)
 }
 
 
-public function getHistograms(Photo $photo)
-{
-    $filePath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path);
-    $path = '/storage/photos/' . $photo->path;
 
-    $response = Http::post('http://127.0.0.1:5555/image', [
-        'imagePath' => $filePath, 
-    ]);
-
-    $data = $response->json();
-    
-    $response2 = Http::post('http://127.0.0.1:5000/ColorDominant', [
-        'image_path' =>  $filePath,
-    ]);
-
-    $colors = json_decode($response2->getBody(), true)['hex_color_codes'];
-
-    $response3 = Http::post('http://127.0.0.1:5580/momentColeur', [
-        'image_path' => $filePath, 
-    ]);
-
-    $moment = $response3->json();
-    
-
-
-    return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $path]);
-
-}
 
 
 }

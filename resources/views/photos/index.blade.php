@@ -139,18 +139,18 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#Showtheme').change(function () {
-            var selectedTheme = $(this).val();
+    $('#Showtheme').change(function () {
+        var selectedTheme = $(this).val();
 
-            $('#photoGallery > div').each(function () {
-                if (selectedTheme === '' || $(this).data('theme') == selectedTheme) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
+        $('#photoGallery > div > div').each(function () {
+            if (selectedTheme === '' || $(this).data('theme') == selectedTheme) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
         });
     });
+});
 
     function toggleActions() {
         $('.actions').toggle();

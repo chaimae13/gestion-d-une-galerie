@@ -264,7 +264,7 @@ public function fetchDataFromFlaskApi($photo_id)
         // If the file doesn't exist, make a request to Flask API
         $apiUrl = 'http://127.0.0.1:5550/api/getImageDistance';
 
-        $datasetPath = 'C:/Users/hp/Desktop/projet_mining/gestion-d-une-galerie/storage/app/public/photos';
+        $datasetPath =  public_path('storage' . DIRECTORY_SEPARATOR . 'photos' );
 
         $response = Http::post($apiUrl, [
             'original_image' => $imagePath,
@@ -326,7 +326,7 @@ $response = Http::post($apiUrl, [
 // Handle the response as needed
 
 // Redirect back to the image search results
-return redirect()->route('ListerImages', ['photo_id' => $photo_id])->with('success', 'Feedback submitted successfully.');
+return redirect()->route('/gallery')->with('success', 'Feedback submitted successfully.');
 
 }
 

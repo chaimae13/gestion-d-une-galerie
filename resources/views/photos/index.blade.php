@@ -1,4 +1,3 @@
-
 @extends('layout')
 @section('title', 'Gallery')
 <head>
@@ -7,17 +6,42 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-  .slideout-overlay {
-background-color: rgba(215, 219, 221, 0.5);
-}
-</style>
+        .slideout-overlay {
+            background-color: rgba(215, 219, 221, 0.5);
+        }
+
+        .dream {
+            column-width: 320px;
+            column-gap: 15px;
+            width: 90%;
+            max-width: 1100px;
+            margin: 50px auto;
+        }
+
+        .dream figure {
+            background: #fefefe;
+            box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+            margin: 0 2px 15px;
+            padding: 15px;
+            padding-bottom: 10px;
+            transition: opacity .4s ease-in-out;
+            display: inline-block;
+            column-break-inside: avoid;
+        }
+
+        .dream figure img {
+            width: 100%;
+            height: auto;
+            padding-bottom: 15px;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 @section('content')
 
 <div class="container mt-3">
-    
     <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Add photo</button>
-    
+    <button class="btn btn-dark" type="button" onclick="toggleActions()">Toggle Actions</button>
     <a class="btn btn-dark" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
         Add Theme
     </a>
@@ -30,89 +54,83 @@ background-color: rgba(215, 219, 221, 0.5);
         </select>
     </div>
 </div>
-    
+
 <div class="offcanvas offcanvas-start  " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Ajouter Theme</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-  <form method="POST" action="/themes">
-             @csrf
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Ajouter Theme</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form method="POST" action="/themes">
+            @csrf
             <label class="form-label" for="nom">Ajouter Theme</label>
             <input class="form-control" type="text" name="nom" id="nom" required>
             <button class="btn btn-dark" type="submit">Ajouter</button>
         </form>
-  </div>
+    </div>
 </div>
 
-
-
-    <div class="offcanvas offcanvas-start " data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Ajouter image</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-                 <form action="/gallery" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="photo" class="form-label">Choisir des photos</label>
-                            <input type="file" class="form-control" name="photos[]"  multiple required>
-                        </div>
-                        <div class="mb-3">
-                            <select class="form-select" name="themeId" id="themeId">
-                          <option class="form-label" disabled selected>Select Theme</option>
-                           @foreach($themes as $theme)
-                               <option value="{{ $theme->id }}">{{ $theme->nom }}</option>
-                           @endforeach
-                           </select>
-                           </div>
-                           
-                        <div class="dropdown-center">
-
-                        <button type="submit" class="btn btn-dark" name="addimage">Ajouter les Photos</button>
-                    </form>
-                        </div>
-         </div>
+<div class="offcanvas offcanvas-start " data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Ajouter image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form action="/gallery" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-3">
+                <label for="photo" class="form-label">Choisir des photos</label>
+                <input type="file" class="form-control" name="photos[]"  multiple required>
+            </div>
+            <div class="mb-3">
+                <select class="form-select" name="themeId" id="themeId">
+                    <option class="form-label" disabled selected>Select Theme</option>
+                    @foreach($themes as $theme)
+                        <option value="{{ $theme->id }}">{{ $theme->nom }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="dropdown-center">
+                <button type="submit" class="btn btn-dark" name="addimage">Ajouter les Photos</button>
+            </div>
+        </form>
+    </div>
 </div>
 
-
-
-
-<div class="container mt-5">
-<div class="row justify-content-center mt-5" id="photoGallery">
-    @foreach ($user->photos as $photo)
-        <div class="col-md-4 mb-4" data-theme="{{ $photo->theme_id }}">
-            <div class="card">
-                <div class="ml-2">
-                        <input class="" type="checkbox" value="{{ $photo->id }}" id="checkbox{{ $photo->id }}">
-                        <label class="" for="checkbox{{ $photo->id }}">
-                            Select
-                        </label>
-                    </div>
-                <a href="{{ asset('/storage/photos/' . $photo->path) }}" target="_blank">
-                    <img src="{{ asset('/storage/photos/' . $photo->path) }}" class="card-img-top" alt="Photo">
-                </a>
-                <div class="card-body">
-                    <div class="icons text-center" style="display: flex; justify-content: center;">
-                        <p>
-                            <a href="{{ route('photo.edit', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-edit"></i></a>
-                            <a href="{{ route('getInfo', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-link"></i></a>
-                            <a href="{{ asset('/storage/photos/' . $photo->path) }}" download class="icon-link d-inline"><i class="fa fa-download"></i></a>
-                            <form action="{{ route('photo.delete', $photo->id) }}" method="post" class="delete-form d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="delete-icon-button d-inline"><i class="fa fa-trash"></i></button>
-                            </form>
-                        </p>
+<div class="container">
+    <div class="box" id="photoGallery">
+        <div class="dream">
+            @foreach ($user->photos as $photo)
+                <div data-theme="{{ $photo->theme_id }}">
+                    <div class="photo-item">
+                        <figure>
+                            <div class="ml-2 actions" style="display: none;">
+                                <input class="photo-checkbox" type="checkbox" value="{{ $photo->id }}" id="checkbox{{ $photo->id }}">
+                                <label class="photo-label" for="checkbox{{ $photo->id }}">Select</label>
+                            </div>
+                            <a href="{{ asset('/storage/photos/' . $photo->path) }}" target="_blank">
+                                <img src="{{ asset('/storage/photos/' . $photo->path) }}" class="card-img-top" alt="Photo">
+                                <div class="form-group actions" style="display: none;">
+                                    <div class="form-group" style="display: flex; justify-content: center;">
+                                        <a href="{{ route('photo.edit', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-edit"></i></a>
+                                        <a href="{{ route('getInfo', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-link"></i></a>
+                                        <a href="{{ route('ListerImages', $photo->id) }}" class="icon-link d-inline"><i class="fas fa-search"></i></a>
+                                        <a href="{{ asset('/storage/photos/' . $photo->path) }}" download class="icon-link d-inline"><i class="fa fa-download"></i></a>
+                                        <form action="{{ route('photo.delete', $photo->id) }}" method="post" class="delete-form d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="delete-icon-button d-inline"><i class="fa fa-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </a>
+                        </figure>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
-    @endforeach
-</div>
-<div class="mt-3">
+    </div>
+    <div class="mt-3">
         <button type="button" class="btn btn-dark" onclick="performAction()">Perform Action on Selected</button>
     </div>
 </div>
@@ -134,6 +152,10 @@ background-color: rgba(215, 219, 221, 0.5);
         });
     });
 
+    function toggleActions() {
+        $('.actions').toggle();
+    }
+
     function performAction() {
         var selectedPhotoIds = [];
 
@@ -148,4 +170,3 @@ background-color: rgba(215, 219, 221, 0.5);
     }
 </script>
 @endsection
-

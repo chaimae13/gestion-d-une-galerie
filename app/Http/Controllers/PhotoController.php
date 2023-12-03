@@ -30,7 +30,7 @@ public function getHistograms(Photo $photo)
 
     $data = $response->json();
     
-    $response2 = Http::post('http://127.0.0.1:5000/ColorDominant', [
+    $response2 = Http::post('http://127.0.0.1:5500/ColorDominant', [
         'image_path' =>  $filePath,
     ]);
 
@@ -246,9 +246,88 @@ public function delete(Photo $photo)
         dd('File not found: ' . $filePath);
     }
 }
+public function fetchDataFromFlaskApi($photo_id)
+{
+    // Find the photo by ID
+    $photo = Photo::findOrFail($photo_id);
 
+    // Get the path and name of the selected image
+    $imagePath = $photo->path;
+    $imageName = pathinfo($imagePath, PATHINFO_FILENAME);
 
+    // Define the path for saving JSON files
+    $jsonFolderPath ='json';
+    $jsonFilePath = $jsonFolderPath . '/' . $imageName . '.json';
 
+    // Check if the JSON file exists
+    if (!Storage::exists($jsonFilePath)) {
+        // If the file doesn't exist, make a request to Flask API
+        $apiUrl = 'http://127.0.0.1:5550/api/getImageDistance';
 
+        $datasetPath = 'C:/Users/hp/Desktop/projet_mining/gestion-d-une-galerie/storage/app/public/photos';
+
+        $response = Http::post($apiUrl, [
+            'original_image' => $imagePath,
+            'folder' => $datasetPath,
+        ]);
+
+        $similarImages = $response->json()['result'];
+
+        // Save the JSON response to a file
+        Storage::disk('public')->put($jsonFilePath, json_encode($similarImages));
+    } else {
+        // If the file exists, retrieve data from the file
+        $similarImages = json_decode(Storage::disk('public')->get($jsonFilePath), true);
+    }
+
+    // Get the image names
+    $imageNames = array_column($similarImages, 0);
+
+    // Get the top 10 image names
+    $topImageNames = array_slice($imageNames, 0, 10);
+
+    // Pass the data to the view
+    return view('ListerImages', compact('topImageNames', 'photo'));
+}
+public function submitFeedback(Request $request)
+{
+    // Get the topImageNames and photo_id from the request
+$topImageNames = json_decode($request->input('topImageNames'), true); // Note the 'true' argument
+
+// Ensure $topImageNames is an array
+$topImageNames = is_array($topImageNames) ? $topImageNames : [];
+
+$photo_id = $request->input('photo_id');
+
+// Process feedback data
+$feedbackData = $request->input('feedback');
+
+// Ensure $feedbackData is an array
+$feedbackData = is_array($feedbackData) ? $feedbackData : [];
+
+// Prepare feedback data in a format suitable for your API
+$formattedFeedback = [];
+foreach ($feedbackData as $index => $feedback) {
+    // Check if $topImageNames[$index] is set before using it
+    if (isset($topImageNames[$index])) {
+        $formattedFeedback[] = [
+            'filename' => $topImageNames[$index],
+            'relevance' => $feedback,
+        ];
+    }
+}
+
+// Submit feedback to your Flask API
+$apiUrl = 'http://127.0.0.1:5550/api/feedback';
+$response = Http::post($apiUrl, [
+    'feedback' => $formattedFeedback,
+]);
+
+// Handle the response as needed
+
+// Redirect back to the image search results
+return redirect()->route('ListerImages', ['photo_id' => $photo_id])->with('success', 'Feedback submitted successfully.');
+
+}
 
 }

@@ -36,15 +36,15 @@
    
 </head>
 @section('content')
-<div class="container">
-    <div class="box" id="photoGallery">
-        <div class="dream">
+<div class="container d-flex justify-content-center">
+    <div class="box " id="photoGallery">
+        <div class="dream ">
         @foreach ($path as $photo)
                
                     <div class="photo-item">
                         <figure>
                             
-                            <img src="{{ asset('storage/photos/' . basename($photo)) }}" class="card-img-top" alt="Photo" style="width: 90%;" >
+                            <img src="{{ asset('storage/photos/' . basename($photo)) }}" class="card-img-top" alt="Photo" >
                           
     
                         </figure>

@@ -110,8 +110,8 @@
                     <div class="photo-item">
                         <figure>
                             <div class="ml-2 actions" style="display: none;">
-                                <input class="photo-checkbox" type="checkbox" value="{{ $photo->id }}" id="checkbox{{ $photo->id }}">
-                                <label class="photo-label" for="checkbox{{ $photo->id }}">Select</label>
+                                <input class="photo-checkbox" type="checkbox" name="selectedImages[]" value="{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}" id="checkbox{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}">
+                                <label class="photo-label" for="checkbox{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}">Select</label>
                             </div>
                             <a href="{{ asset('/storage/photos/' . $photo->path) }}" target="_blank">
                                 <img src="{{ asset('/storage/photos/' . $photo->path) }}" class="card-img-top" alt="Photo">
@@ -130,7 +130,6 @@
                 </div>
             @endforeach
         </div>
-        @endforeach
             <div class="mt-3">
                 <button type="submit" class="btn btn-dark" >Get Descriptors</button>
             </div>

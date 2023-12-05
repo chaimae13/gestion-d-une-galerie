@@ -81,10 +81,12 @@ public function viewJSON($photo_id){
 
         $moment =  $jsonData['moment'];
         $path =  $jsonData['path'];
-        // $path1 = []
-    //    $path1.push
+        $paths[] = $path;
+       
 
-        return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $path]);
+        
+
+        return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $paths[0]]);
     } else {
 
         return response()->json(['error' => 'Fichier non trouvé'], 404);
@@ -102,8 +104,8 @@ public function performAction(Request $request)
         // Make asynchronous requests to the three APIs
         $responses = Http::withOptions(['verify' => false])->post('http://127.0.0.1:5555/image', ['selectedImages' => $selectedImages]);
         $data = $responses->json();
-        $colors = Http::withOptions(['verify' => false])->post('http://127.0.0.1:5000/dominantColors', ['selectedImages' => $selectedImages])->json();
-        $colors1 = $colors['hex_color_codes'];
+        $colors = Http::withOptions(['verify' => false])->post('http://127.0.0.1:5500/ColorDominant', ['selectedImages' => $selectedImages])->json();
+        
         $moment = Http::withOptions(['verify' => false])->post('http://127.0.0.1:5580/momentColeur', ['selectedImages' => $selectedImages])->json();
 
             $jsonData = [
@@ -121,7 +123,7 @@ public function performAction(Request $request)
         Storage::put('json_data/' . $jsonFileName, $jsonContent);
 
         // Handle each API response and update the UI
-   return view('form', ['data' => $data, 'colors' => $colors1, 'moment' => $moment, 'path' => $selectedImages]);
+   return view('form', ['data' => $data, 'colors' => $colors["hex_color_codes"], 'moment' => $moment, 'path' => $selectedImages]);
     }
     public function upload(Request $request)
     {

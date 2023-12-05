@@ -30,10 +30,19 @@
 </head>
 <body>
 <div style="display: flex; flex-direction: row;">
+@foreach ($path as $photo)
+                <div>
+                    <div class="photo-item">
+                        <figure>
+                         
+                                <img src="{{ $photo}}" class="card-img-top" alt="Photo">
+                          
+                        </figure>
+                    </div>
+                </div>
+ @endforeach
     <div>
-    <img src="{{ $path }}" alt="Image" style="width: 90%;" />
-
-    </div>
+   
 <div style="display: flex; flex-direction: column;">
 <div style="display: flex; flex-direction: row;">
 <div>

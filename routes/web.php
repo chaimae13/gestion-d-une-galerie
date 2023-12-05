@@ -39,5 +39,7 @@ Route::post('/themes', [ThemeController::class,'add']);
 Route::get('/editer-photo/{id}',[PhotoController::class,'edit'])->name('photo.edit');
 Route::post('/photos/{id}/update', [PhotoController::class,'update'])->name('photo.update');
 Route::post('/photo/{id}/change-scale', [PhotoController::class,'changeScale'])->name('photo.changeScale');
+Route::post('/getInfos', [PhotoController::class, 'performAction'])->name('perform.action');
+Route::delete('/delete-photo/{photoId}', [PhotoController::class, 'delete'])->name('photo.delete');
 
 

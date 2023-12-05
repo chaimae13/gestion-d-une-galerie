@@ -30,17 +30,19 @@ public function getHistograms(Photo $photo)
 
     $data = $response->json();
     
-    $response2 = Http::post('http://127.0.0.1:5000/ColorDominant', [
+    $response2 = Http::post('http://127.0.0.1:5000/dominantColors', [
         'image_path' =>  $filePath,
     ]);
 
     $colors = json_decode($response2->getBody(), true)['hex_color_codes'];
+    // $colors = $response2->json();
 
     $response3 = Http::post('http://127.0.0.1:5580/momentColeur', [
         'image_path' => $filePath, 
     ]);
 
     $moment = $response3->json();
+    
     
         //  array with the data
         $jsonData = [
@@ -57,23 +59,20 @@ public function getHistograms(Photo $photo)
     $jsonFileName = 'photo_data_' . $photo->id . '.json';
     Storage::put('json_data/' . $jsonFileName, $jsonContent);
 
-
-   
-
 }
 
 public function viewJSON($photo_id){
     
     $filename = 'json_data/photo_data_' . $photo_id.'.json';
 
-    // Vérifiez si le fichier existe dans le répertoire storage
+    // Vérifier si le fichier existe dans le répertoire storage
     if (Storage::exists($filename)) {
         // Lisez le contenu du fichier
         $content = Storage::get($filename);
 
         $jsonData = json_decode($content, true);
 
-        // Vérifiez si le décodage a réussi
+        // Vérifier si le décodage a réussi
         if ($jsonData === null) {
             return response()->json(['error' => 'Erreur de décodage JSON'], 500);
         }
@@ -82,15 +81,48 @@ public function viewJSON($photo_id){
 
         $moment =  $jsonData['moment'];
         $path =  $jsonData['path'];
+        $path1 = []
+       $path1.push
 
         return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $path]);
     } else {
-        // Retournez une réponse en cas d'erreur (par exemple, le fichier n'existe pas)
+
         return response()->json(['error' => 'Fichier non trouvé'], 404);
     }
   
 
 }
+
+
+public function performAction(Request $request)
+    {
+        
+        $selectedImages = $request->input('selectedImages', []);
+        // dd($selectedImages);
+        // Make asynchronous requests to the three APIs
+        $responses = Http::withOptions(['verify' => false])->post('http://127.0.0.1:5555/image', ['selectedImages' => $selectedImages]);
+        $data = $responses->json();
+        $colors = Http::withOptions(['verify' => false])->post('http://127.0.0.1:5000/dominantColors', ['selectedImages' => $selectedImages])->json();
+        $colors1 = $colors['hex_color_codes'];
+        $moment = Http::withOptions(['verify' => false])->post('http://127.0.0.1:5580/momentColeur', ['selectedImages' => $selectedImages])->json();
+
+            $jsonData = [
+                'data' => $data,
+                'colors' => $colors,
+                'moment' => $moment,
+                'path' => $selectedImages,
+            ];
+        
+        // Convert the array to JSON format
+        $jsonContent = json_encode($jsonData, JSON_PRETTY_PRINT);
+    
+        // Store the JSON content in a file
+        $jsonFileName = 'photo_try_.json';
+        Storage::put('json_data/' . $jsonFileName, $jsonContent);
+
+        // Handle each API response and update the UI
+   return view('form', ['data' => $data, 'colors' => $colors1, 'moment' => $moment, 'path' => $selectedImages]);
+    }
     public function upload(Request $request)
     {
         $request->validate([
@@ -103,14 +135,12 @@ public function viewJSON($photo_id){
             // Process each uploaded file
 
             $user = auth()->user();
-    foreach ($request->file('photos') as $photo) {
+        foreach ($request->file('photos') as $photo) {
         $photoName = $photo->getClientOriginalName();
 
         $photo->storeAs('photos', $photoName, 'public');
 
-        $title = pathinfo($photoName, PATHINFO_FILENAME);
-        // $title = $request->input('title') ?? $photoName;
-        // $title = $photoName;         
+        $title = pathinfo($photoName, PATHINFO_FILENAME);        
         $themeId = $request->input('themeId');
 
       
@@ -151,10 +181,10 @@ public function edit($id)
 
 public function update(Request $request, $id)
 {
-    // Récupérez la photo à partir de l'ID
+    // Récupérer la photo à partir de l'ID
     $photo = Photo::find($id);
 
-    // Récupérez les coordonnées de recadrage de la requête
+    // Récupérer les coordonnées de recadrage de la requête
     $x = intval($request->input('x'));
     $y = intval($request->input('y'));
     $width = intval($request->input('width'));
@@ -231,9 +261,9 @@ public function changeScale(Request $request, $id)
        
     return redirect('/gallery')->with('success', 'Photo éditée avec succès.');
     }
-public function delete(Photo $photo)
+public function delete($photoId)
 {
-    
+    $photo = Photo::find($photoId);
     $filePath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path);
 
         
@@ -241,7 +271,7 @@ public function delete(Photo $photo)
     if (file_exists($filePath)) {
         unlink($filePath); // Supprimer le fichier
         $photo->delete();  // Supprimer l'enregistrement de la base de données
-        return redirect('/gallery')->with('success', 'Photo supprimée avec succès.');
+        // return redirect('/gallery')->with('success', 'Photo supprimée avec succès.');
     } else {
         dd('File not found: ' . $filePath);
     }

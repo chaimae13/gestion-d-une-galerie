@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <style>
   .slideout-overlay {
 background-color: rgba(215, 219, 221, 0.5);
@@ -82,12 +85,14 @@ background-color: rgba(215, 219, 221, 0.5);
 
 <div class="container mt-5">
 <div class="row justify-content-center mt-5" id="photoGallery">
+<form method="POST" action="{{ route('perform.action') }}" id="performActionForm">
+    @csrf
     @foreach ($user->photos as $photo)
         <div class="col-md-4 mb-4" data-theme="{{ $photo->theme_id }}">
             <div class="card">
                 <div class="ml-2">
-                        <input class="" type="checkbox" value="{{ $photo->id }}" id="checkbox{{ $photo->id }}">
-                        <label class="" for="checkbox{{ $photo->id }}">
+                        <input class="" type="checkbox" name="selectedImages[]" value="{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}" id="checkbox{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}">
+                        <label class="" for="checkbox{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}">
                             Select
                         </label>
                     </div>
@@ -100,25 +105,23 @@ background-color: rgba(215, 219, 221, 0.5);
                             <a href="{{ route('photo.edit', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-edit"></i></a>
                             <a href="{{ route('getInfo', $photo->id) }}" class="icon-link d-inline"><i class="fa fa-link"></i></a>
                             <a href="{{ asset('/storage/photos/' . $photo->path) }}" download class="icon-link d-inline"><i class="fa fa-download"></i></a>
-                            <form action="{{ route('photo.delete', $photo->id) }}" method="post" class="delete-form d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="delete-icon-button d-inline"><i class="fa fa-trash"></i></button>
-                            </form>
+                            <a href=""  class="delete-icon-button d-inline" onclick="deletePhoto({{ $photo->id }})" ><i class="fa fa-trash"></i></a>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-    @endforeach
-</div>
-<div class="mt-3">
-        <button type="button" class="btn btn-dark" onclick="performAction()">Perform Action on Selected</button>
+        @endforeach
+            <div class="mt-3">
+                <button type="submit" class="btn btn-dark" >Perform Action on Selected</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>\
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     $(document).ready(function () {
         $('#Showtheme').change(function () {
@@ -134,18 +137,30 @@ background-color: rgba(215, 219, 221, 0.5);
         });
     });
 
-    function performAction() {
-        var selectedPhotoIds = [];
-
-        // Iterate through the checkboxes to find selected ones
-        $('input[type="checkbox"]:checked').each(function () {
-            selectedPhotoIds.push($(this).val());
+    function deletePhoto(photoId) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette photo?')) {
+        $.ajax({
+            url: '/delete-photo/' + photoId, 
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}', 
+            },
+            success: function(response) {
+              
+                console.log(response);
+                
+                window.location.reload();
+            },
+            error: function(error) {
+    
+                console.error(error);
+            }
         });
-
-        // Log the selected photo ids (you can perform your desired action here)
-        console.log(selectedPhotoIds);
-        alert('Perform your action on selected photos: ' + selectedPhotoIds.join(', '));
     }
+}
+
+    
+
 </script>
 @endsection
 

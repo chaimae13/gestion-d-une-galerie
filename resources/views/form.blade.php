@@ -35,7 +35,7 @@
                     <div class="photo-item">
                         <figure>
                          
-                                <img src="{{ $photo}}" class="card-img-top" alt="Photo">
+                                <img src="{{ asset('storage/photos/' . basename($photo)) }}" class="card-img-top" alt="Photo">
                           
                         </figure>
                     </div>
@@ -117,7 +117,6 @@ console.log('histogramData.histogram1:', histogramData.histogram1);
             },
         });
     } else {
-        // Handle the case where the data is not as expected, e.g., display an error message.
         console.error('Data is not in the expected format.');
     }
 </script>

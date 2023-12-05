@@ -2,43 +2,13 @@
 @section('title', 'Gallery')
 <head>
     <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/photos.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <style>
-        .slideout-overlay {
-            background-color: rgba(215, 219, 221, 0.5);
-        }
-
-        .dream {
-            column-width: 320px;
-            column-gap: 15px;
-            width: 90%;
-            max-width: 1100px;
-            margin: 50px auto;
-        }
-
-        .dream figure {
-            background: #fefefe;
-            box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
-            margin: 0 2px 15px;
-            padding: 15px;
-            padding-bottom: 10px;
-            transition: opacity .4s ease-in-out;
-            display: inline-block;
-            column-break-inside: avoid;
-        }
-
-        .dream figure img {
-            width: 100%;
-            height: auto;
-            padding-bottom: 15px;
-            margin-bottom: 5px;
-        }
-    </style>
 </head>
 @section('content')
 

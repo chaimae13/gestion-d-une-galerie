@@ -83,10 +83,10 @@ class PhotoController extends Controller
             $path = $jsonData['path'];
             $paths[] = $path;
 
+// dd( $paths);
 
 
-
-            return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $paths[0]]);
+            return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $paths]);
         } else {
 
             return response()->json(['error' => 'Fichier non trouvé'], 404);
@@ -264,21 +264,21 @@ class PhotoController extends Controller
 
         return redirect('/gallery')->with('success', 'Photo éditée avec succès.');
     }
-    // public function delete($photoId)
-    // {
-    //     $photo = Photo::find($photoId);
-    //     $filePath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path);
+    public function delete($photoId)
+    {
+        $photo = Photo::find($photoId);
+        $filePath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path);
 
 
-    //     // Check if the file exists before delete
-    //     if (file_exists($filePath)) {
-    //         unlink($filePath); // Supprimer le fichier
-    //         $photo->delete();  // Supprimer l'enregistrement de la base de données
-    //         // return redirect('/gallery')->with('success', 'Photo supprimée avec succès.');
-    //     } else {
-    //         dd('File not found: ' . $filePath);
-    //     }
-    // }
+        // Check if the file exists before delete
+        if (file_exists($filePath)) {
+            unlink($filePath); // Supprimer le fichier
+            $photo->delete();  // Supprimer l'enregistrement de la base de données
+            // return redirect('/gallery')->with('success', 'Photo supprimée avec succès.');
+        } else {
+            dd('File not found: ' . $filePath);
+        }
+    }
     public function fetchDataFromFlaskApi($photo_id)
     {
         // Find the photo by ID

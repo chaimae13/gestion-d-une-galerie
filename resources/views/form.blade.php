@@ -1,8 +1,20 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+</head>
+@extends('layout')
+@section('title', 'Descriptors')
 <head>
-    <meta charset="utf-8">
+<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/photos.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="shortcut icon" href="{{ asset('images/camera.png') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         .container {
             width: 95%;
@@ -21,27 +33,28 @@
         }
         
     </style>
-    <title>Image</title>
-    <link rel="shortcut icon" href="{{ asset('images/camera.png') }}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
+   
 </head>
-<body>
-<div style="display: flex; flex-direction: row;">
-@foreach ($path as $photo)
-                <div>
+@section('content')
+<div class="container">
+    <div class="box" id="photoGallery">
+        <div class="dream">
+        @foreach ($path as $photo)
+               
                     <div class="photo-item">
                         <figure>
-                         
-                                <img src="{{ asset('storage/photos/' . basename($photo)) }}" class="card-img-top" alt="Photo">
+                            
+                            <img src="{{ asset('storage/photos/' . basename($photo)) }}" class="card-img-top" alt="Photo" style="width: 90%;" >
                           
+    
                         </figure>
                     </div>
-                </div>
- @endforeach
-    <div>
+                
+            @endforeach
+        </div>
+         
+    </div>
+</div>
    
 <div style="display: flex; flex-direction: column;">
 <div style="display: flex; flex-direction: row;">

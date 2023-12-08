@@ -7,6 +7,7 @@ use App\Models\Photo;
 use App\Models\theme;
 use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Image;
@@ -158,14 +159,20 @@ class PhotoController extends Controller
         return redirect('/gallery')->with('success', 'Photo ajoutée avec succès.');
     }
 
-    public function index()
-    {
-        // Récupérer l'utilisateur authentifié
-        $user = auth()->user();
-        $themes = theme::all();
+    public function index(Request $request)
+{
+    $user = auth()->user();
+    $themes = theme::all();
+    $perPage = 10;
+    $currentPage = $request->input('page', 1);
 
-        return view('photos.index', compact('user'), compact('themes'));
-    }
+    $photos = DB::table('photos')
+        ->where('user_id', $user->id)
+        ->orderBy('created_at', 'desc')
+        ->paginate($perPage);
+
+    return view('photos.index', compact('user', 'themes', 'photos'));
+}
 
 
     public function edit($id)
@@ -290,7 +297,7 @@ class PhotoController extends Controller
             // If the file doesn't exist, make a request to Flask API
             $apiUrl = 'http://127.0.0.1:5550/api/getImageDistance';
 
-        $datasetPath = 'C:/Users/hp/Desktop/gestion-d-une-galerie/storage/app/public/photos';
+        $datasetPath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos');
 
             $response = Http::post($apiUrl, [
                 'original_image' => $imagePath,

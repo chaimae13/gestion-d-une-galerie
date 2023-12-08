@@ -258,17 +258,19 @@ class PhotoController extends Controller
 
         return redirect('/gallery')->with('success', 'Photo éditée avec succès.');
     }
-    public function delete(Photo $photo)
+    public function delete($photoId)
     {
 
+        $photo = Photo::find($photoId);
         $filePath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path);
-
-
+    
+    
         // Check if the file exists before delete
         if (file_exists($filePath)) {
             unlink($filePath); // Supprimer le fichier
             $photo->delete();  // Supprimer l'enregistrement de la base de données
             return redirect('/gallery')->with('success', 'Photo supprimée avec succès.');
+            // return redirect('/gallery')->with('success', 'Photo supprimée avec succès.');
         } else {
             dd('File not found: ' . $filePath);
         }

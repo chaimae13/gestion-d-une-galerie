@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Photo;
 use App\Models\theme;
-use Directory;
 use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
@@ -224,7 +223,7 @@ class PhotoController extends Controller
 
     public function changeScale(Request $request, $id)
     {
-        $photo = Photo::find($id);
+
         // Valider les données du formulaire
         $request->validate([
             'scaleFactor' => 'required|numeric',
@@ -291,7 +290,7 @@ class PhotoController extends Controller
             // If the file doesn't exist, make a request to Flask API
             $apiUrl = 'http://127.0.0.1:5550/api/getImageDistance';
 
-        $datasetPath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' );
+        $datasetPath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos');
 
             $response = Http::post($apiUrl, [
                 'original_image' => $imagePath,
@@ -318,7 +317,9 @@ class PhotoController extends Controller
     }
 
     public function submitFeedback(Request $request)
+    
     {
+
         // Get the topImageNames and photo_id from the request
         $topImageNames = json_decode($request->input('topImageNames'), true); // Note the 'true' argument
 

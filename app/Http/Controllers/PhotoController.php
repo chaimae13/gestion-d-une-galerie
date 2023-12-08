@@ -223,7 +223,7 @@ class PhotoController extends Controller
 
     public function changeScale(Request $request, $id)
     {
-
+        $photo = Photo::find($id);
         // Valider les données du formulaire
         $request->validate([
             'scaleFactor' => 'required|numeric',

@@ -45,12 +45,20 @@
 
 <body>
     <div class="container">
+        <div class="box">
+    <div class="dream" style="display: flex; justify-content: center;">
+        <figure>
+            <img src="{{ asset('/storage/photos/' . $photo->path) }}" class="card-img-top" alt="Query image">
+        </figure>
+    </div>
+</div>
+        
         <form action="{{ route('feedback') }}" method="POST">
             @csrf
             <div class="head">
                 <h1 class="mb-4" style=" margin-top: 10px; float: inline-start;" >Image Search Results</h1>
                 <button class="btn btn-dark" id="toggleFeedback" type="button" style="margin-top: 10px;  float: inline-end;" >Feedback</button>
-                <button class="btn btn-dark" id="saveButton" type="button" style="margin-top: 10px;  float: inline-end;display:none; " >Save</button>
+                <button class="btn btn-dark" id="saveButton" type="submit" style="margin-top: 10px;  float: inline-end;display:none; " >Save</button>
             </div>
             <input type="hidden" name="photo_id" value="{{ $photo->id }}">
             <input type="hidden" name="topImageNames" value="{{ json_encode($topImageNames) }}">

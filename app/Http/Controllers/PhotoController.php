@@ -85,9 +85,6 @@ class PhotoController extends Controller
             $moment = $jsonData['moment'];
             $path = $jsonData['path'];
             $paths[] = $path;
-        $moment =  $jsonData['moment'];
-        $path =  $jsonData['path'];
-        $paths[] = $path;
 
         return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $paths]);
     } else {
@@ -133,6 +130,10 @@ class PhotoController extends Controller
         foreach ($request->file('photos') as $photo) {
             $photoName = $photo->getClientOriginalName();
 
+            if ($this->photoExists($photoName)) {
+                continue; // Skip adding the photo and move to the next iteration
+            }
+
             $photo->storeAs('photos', $photoName, 'public');
 
             $title = pathinfo($photoName, PATHINFO_FILENAME);
@@ -159,7 +160,13 @@ class PhotoController extends Controller
         return redirect('/gallery')->with('success', 'Photo ajoutée avec succès.');
     }
 
-    public function index(Request $request)
+    private function photoExists($photoName)
+{
+    // Check if a photo with the same filename already exists in the database
+    return Photo::where('path', $photoName)->exists();
+}
+
+public function index(Request $request)
 {
     $user = auth()->user();
     $themes = theme::all();
@@ -264,17 +271,19 @@ class PhotoController extends Controller
 
         return redirect('/gallery')->with('success', 'Photo éditée avec succès.');
     }
-    public function delete(Photo $photo)
+    public function delete($photoId)
     {
 
+        $photo = Photo::find($photoId);
         $filePath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path);
-
-
+    
+    
         // Check if the file exists before delete
         if (file_exists($filePath)) {
             unlink($filePath); // Supprimer le fichier
             $photo->delete();  // Supprimer l'enregistrement de la base de données
             return redirect('/gallery')->with('success', 'Photo supprimée avec succès.');
+            // return redirect('/gallery')->with('success', 'Photo supprimée avec succès.');
         } else {
             dd('File not found: ' . $filePath);
         }
@@ -324,7 +333,9 @@ class PhotoController extends Controller
     }
 
     public function submitFeedback(Request $request)
+    
     {
+
         // Get the topImageNames and photo_id from the request
         $topImageNames = json_decode($request->input('topImageNames'), true); // Note the 'true' argument
 

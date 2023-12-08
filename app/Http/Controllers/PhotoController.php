@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Photo;
 use App\Models\theme;
+use Directory;
 use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
@@ -84,13 +85,16 @@ class PhotoController extends Controller
             $moment = $jsonData['moment'];
             $path = $jsonData['path'];
             $paths[] = $path;
+        $moment =  $jsonData['moment'];
+        $path =  $jsonData['path'];
+        $paths[] = $path;
 
-            return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $paths]);
-        } else {
-            // Retournez une réponse en cas d'erreur (par exemple, le fichier n'existe pas)
-            return response()->json(['error' => 'Fichier non trouvé'], 404);
-        }
-
+        return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $paths]);
+    } else {
+        // Retournez une réponse en cas d'erreur (par exemple, le fichier n'existe pas)
+        return response()->json(['error' => 'Fichier non trouvé'], 404);
+    }
+  
 
     }
 
@@ -287,8 +291,7 @@ class PhotoController extends Controller
             // If the file doesn't exist, make a request to Flask API
             $apiUrl = 'http://127.0.0.1:5550/api/getImageDistance';
 
-            // $datasetPath = 'C:/Users/hp/Desktop/projet_mining/gestion-d-une-galerie/storage/app/public/photos'
-            $datasetPath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos');
+        $datasetPath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' );
 
             $response = Http::post($apiUrl, [
                 'original_image' => $imagePath,

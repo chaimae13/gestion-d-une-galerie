@@ -84,9 +84,6 @@ class PhotoController extends Controller
             $moment = $jsonData['moment'];
             $path = $jsonData['path'];
             $paths[] = $path;
-        $moment =  $jsonData['moment'];
-        $path =  $jsonData['path'];
-        $paths[] = $path;
 
         return view('form', ['data' => $data, 'colors' => $colors, 'moment' => $moment, 'path' => $paths]);
     } else {
@@ -132,6 +129,10 @@ class PhotoController extends Controller
         foreach ($request->file('photos') as $photo) {
             $photoName = $photo->getClientOriginalName();
 
+            if ($this->photoExists($photoName)) {
+                continue; // Skip adding the photo and move to the next iteration
+            }
+
             $photo->storeAs('photos', $photoName, 'public');
 
             $title = pathinfo($photoName, PATHINFO_FILENAME);
@@ -157,6 +158,12 @@ class PhotoController extends Controller
 
         return redirect('/gallery')->with('success', 'Photo ajoutée avec succès.');
     }
+
+    private function photoExists($photoName)
+{
+    // Check if a photo with the same filename already exists in the database
+    return Photo::where('path', $photoName)->exists();
+}
 
     public function index()
     {

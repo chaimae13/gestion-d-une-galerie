@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Photo;
 use App\Models\theme;
-use Directory;
 use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
@@ -266,7 +265,7 @@ public function fetchDataFromFlaskApi($photo_id)
         // If the file doesn't exist, make a request to Flask API
         $apiUrl = 'http://127.0.0.1:5550/api/getImageDistance';
 
-        $datasetPath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos' );
+        $datasetPath = 'C:/Users/hp/Desktop/gestion-d-une-galerie/storage/app/public/photos';
 
         $response = Http::post($apiUrl, [
             'original_image' => $imagePath,

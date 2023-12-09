@@ -105,7 +105,7 @@
            
         </div>
             <div class="mt-3">
-                <button type="submit" class="btn btn-dark" >Get Descriptors</button>
+            <button id="getDescriptorsContainer" style="display: none;" type="submit" class="btn btn-dark" >Get Descriptors</button>
             </div>
         </form>
         <div class="pagination" style="align-items: center; justify-content: center;">

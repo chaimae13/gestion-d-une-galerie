@@ -169,13 +169,8 @@ class PhotoController extends Controller
 public function index(Request $request)
 {
     $user = auth()->user();
-<<<<<<< HEAD
     $themes = theme::all();
     $perPage = 12;
-=======
-    $themes = Theme::all();
-    $perPage = 10;
->>>>>>> ab823657ad52f3e5d97d7c1d3ea3e4e1e0f38272
     $currentPage = $request->input('page', 1);
     $selectedTheme = $request->input('theme'); // Get selected theme ID from query params
 

@@ -62,7 +62,6 @@
 <div style="display: flex; margin-left: 10px;width: 90%;">
     @foreach ($colors as $color)
         <div style="width: 80px; height: 80px; background-color: {{ $color }};">
-        <p>{{ $color }}</p>
         </div>
     @endforeach
 </div></div>

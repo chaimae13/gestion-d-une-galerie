@@ -19,12 +19,14 @@
         Add Theme
     </a>
     <div class="btn">
-        <select class="form-select" name="Showtheme" id="Showtheme">
-            <option value="" selected>View All</option>
-            @foreach($themes as $theme)
-                <option value="{{ $theme->id }}">{{ $theme->nom }}</option>
-            @endforeach
-        </select>
+<!-- Your existing HTML code for the dropdown -->
+<select class="form-select" name="Showtheme" id="Showtheme">
+    <option value="" @if(!$selectedTheme) selected @endif>View All</option>
+    @foreach($themes as $theme)
+        <option value="{{ $theme->id }}" @if($selectedTheme == $theme->id) selected @endif>{{ $theme->nom }}</option>
+    @endforeach
+</select>
+
     </div>
 </div>
 
@@ -77,7 +79,7 @@
         <form method="POST" action="{{ route('perform.action') }}" id="performActionForm">
             @csrf
             @foreach ($photos as $photo)
-                <div data-theme="{{ $photo->theme_id }}">
+                <div data-theme="{{ $photo->theme_id }}" class="theme-{{ $photo->theme_id }} photo-item">
                     <div class="photo-item">
                         <figure>
                             <div class="ml-2 actions" style="display: none;">
@@ -115,6 +117,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>\
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script>
     $(document).ready(function () {
     $('#Showtheme').change(function () {
@@ -168,6 +171,20 @@ function toggleGetDescriptorsButton() {
         // Toggle the display of the "Get Descriptors" button accordingly
         getDescriptorsContainer.style.display = anyCheckboxChecked ? 'block' : 'none';
     }
+
+    
+    $(document).ready(function () {
+    $('#Showtheme').change(function () {
+        var selectedTheme = $(this).val();
+        window.location.href = '{{ route("gallery") }}?theme=' + selectedTheme;
+    });
+});
+
+
+
+
+
+
 
 </script>
 @endsection

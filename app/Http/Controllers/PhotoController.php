@@ -272,54 +272,78 @@ class PhotoController extends Controller
             dd('File not found: ' . $filePath);
         }
     }
+
+    
     public function fetchDataFromFlaskApi($photo_id)
     {
         // Find the photo by ID
         $photo = Photo::findOrFail($photo_id);
-
+        
         // Get the path and name of the selected image
         $imagePath = $photo->path;
         $imageName = pathinfo($imagePath, PATHINFO_FILENAME);
-
+        
         // Define the path for saving JSON files
         $jsonFolderPath = 'json';
         $jsonFilePath = $jsonFolderPath . '/' . $imageName . '.json';
-
+        
         // Check if the JSON file exists
-        if (!Storage::exists($jsonFilePath)) {
+        if (Storage::exists($jsonFilePath)) {
+            // If the file exists, retrieve data from the file
+            $similarImages = json_decode(Storage::disk('public')->get($jsonFilePath), true);
+        } else {
             // If the file doesn't exist, make a request to Flask API
             $apiUrl = 'http://127.0.0.1:5550/api/getImageDistance';
-
-        $datasetPath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos');
-
+            $datasetPath = public_path('storage' . DIRECTORY_SEPARATOR . 'photos');
+        
             $response = Http::post($apiUrl, [
                 'original_image' => $imagePath,
                 'folder' => $datasetPath,
             ]);
-
+        
             $similarImages = $response->json()['result'];
-
+        
+            // Check if valid data is received
+            if (!is_array($similarImages)) {
+                // Log or display an error
+                return redirect()->back()->with('error', 'Invalid data received from Flask API');
+            }
+        
             // Save the JSON response to a file
             Storage::disk('public')->put($jsonFilePath, json_encode($similarImages));
-        } else {
-            // If the file exists, retrieve data from the file
-            $similarImages = json_decode(Storage::disk('public')->get($jsonFilePath), true);
         }
-
-        // Get the image names
-        $imageNames = array_column($similarImages, 0);
-
-        // Get the top 10 image names
-        $topImageNames = array_slice($imageNames, 0, 10);
-
+        
+        // Check if similarImages is an array
+        if (!is_array($similarImages)) {
+            // Log or display an error
+            return redirect()->back()->with('error', 'Invalid data retrieved from storage');
+        }
+        
+        // Filter only relevant images
+        $relevantImages = array_filter($similarImages, function ($image) {
+            return $image[2] === 'relevant';
+        });
+    
+        // Check if relevantImages is an array
+        if (!is_array($relevantImages)) {
+            // Log or display an error
+            return redirect()->back()->with('error', 'Invalid relevant images');
+        }
+    
+        // Get the top 10 relevant image names
+        $topRelevantImageNames = array_slice($relevantImages, 0, 10);
+    
+        // Extract only the filenames from relevant images
+        $topImageNames = array_column($topRelevantImageNames, 0);
+    
         // Pass the data to the view
         return view('ListerImages', compact('topImageNames', 'photo'));
     }
+    
+
 
     public function submitFeedback(Request $request)
-    
     {
-
         // Get the topImageNames and photo_id from the request
         $topImageNames = json_decode($request->input('topImageNames'), true); // Note the 'true' argument
 
@@ -334,7 +358,7 @@ class PhotoController extends Controller
         // Ensure $feedbackData is an array
         $feedbackData = is_array($feedbackData) ? $feedbackData : [];
 
-        // Prepare feedback data in a format suitable for your API
+        // Prepare feedback data in a format suitable for your Flask API
         $formattedFeedback = [];
         foreach ($feedbackData as $index => $feedback) {
             // Check if $topImageNames[$index] is set before using it
@@ -346,17 +370,38 @@ class PhotoController extends Controller
             }
         }
 
-        // Submit feedback to your Flask API
-        $apiUrl = 'http://127.0.0.1:5550/api/feedback';
-        $response = Http::post($apiUrl, [
-            'feedback' => $formattedFeedback,
-        ]);
+        // Find the photo by ID
+        $photo = Photo::findOrFail($photo_id);
 
-        // Handle the response as needed
+        // Get the path and name of the selected image
+        $imagePath = $photo->path;
+        $imageName = pathinfo($imagePath, PATHINFO_FILENAME);
+
+        // Define the path for saving JSON files
+        $jsonFolderPath = 'json';
+        $jsonFilePath = $jsonFolderPath . '/' . $imageName . '.json';
+
+        // Get the existing data from the JSON file
+        $existingData = Storage::disk('public')->exists($jsonFilePath)
+            ? json_decode(Storage::disk('public')->get($jsonFilePath), true)
+            : [];
+
+        // Update the existing data with the new feedback
+        foreach ($formattedFeedback as $feedback) {
+            foreach ($existingData as &$data) {
+                if ($data[0] === $feedback['filename']) {
+                    $data[2] = $feedback['relevance']; // Update the relevance based on the submitted feedback
+                    break;
+                }
+            }
+        }
+
+        // Save the updated data back to the JSON file
+        Storage::disk('public')->put($jsonFilePath, json_encode($existingData));
 
         // Redirect back to the image search results
-        return redirect()->route('/gallery')->with('success', 'Feedback submitted successfully.');
-
+        return redirect()->route('gallery')->with('success', 'Feedback submitted successfully.');
     }
+    
 
 }

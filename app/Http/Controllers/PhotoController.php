@@ -169,17 +169,25 @@ class PhotoController extends Controller
 public function index(Request $request)
 {
     $user = auth()->user();
-    $themes = theme::all();
+    $themes = Theme::all();
     $perPage = 10;
     $currentPage = $request->input('page', 1);
+    $selectedTheme = $request->input('theme'); // Get selected theme ID from query params
 
-    $photos = DB::table('photos')
+    // Fetch photos based on selected theme or all photos if no theme selected
+    $photosQuery = DB::table('photos')
         ->where('user_id', $user->id)
-        ->orderBy('created_at', 'desc')
-        ->paginate($perPage);
+        ->orderBy('created_at', 'desc');
 
-    return view('photos.index', compact('user', 'themes', 'photos'));
+    if ($selectedTheme) {
+        $photosQuery->where('theme_id', $selectedTheme);
+    }
+
+    $photos = $photosQuery->paginate($perPage);
+
+    return view('photos.index', compact('user', 'themes', 'photos', 'selectedTheme'));
 }
+
 
 
     public function edit($id)

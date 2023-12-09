@@ -25,7 +25,6 @@
         }
         th, td {
             border: 1px solid black;
-            padding: 8px;
             text-align: left;
         }
         th {
@@ -36,7 +35,9 @@
    
 </head>
 @section('content')
-<div class="container d-flex justify-content-center">
+   
+<div style="display: flex; flex-direction: row; margin: 20px;">
+<div class="container">
     <div class="box " id="photoGallery">
         <div class="dream ">
         @foreach ($path as $photo)
@@ -45,8 +46,6 @@
                         <figure>
                             
                             <img src="{{ asset('storage/photos/' . basename($photo)) }}" class="card-img-top" alt="Photo" >
-                          
-    
                         </figure>
                     </div>
                 
@@ -55,8 +54,8 @@
          
     </div>
 </div>
-   
 <div style="display: flex; flex-direction: column;">
+
 <div style="display: flex; flex-direction: row;">
 <div>
 <h2>Couleurs Dominant</h2>
@@ -88,6 +87,7 @@
     <h1>Histogram Charts</h1>
 
         <canvas id="combinedCanvas"></canvas>
+    </div>
     </div>
 
     </div></div>
@@ -136,3 +136,4 @@ console.log('histogramData.histogram1:', histogramData.histogram1);
 
 </body>
 </html>
+@endsection

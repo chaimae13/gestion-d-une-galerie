@@ -75,12 +75,12 @@
         <div class="dream">
         <form method="POST" action="{{ route('perform.action') }}" id="performActionForm">
             @csrf
-            @foreach ($user->photos as $photo)
+            @foreach ($photos as $photo)
                 <div data-theme="{{ $photo->theme_id }}">
                     <div class="photo-item">
                         <figure>
                             <div class="ml-2 actions" style="display: none;">
-                                <input class="photo-checkbox" type="checkbox" name="selectedImages[]" value="{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}" id="checkbox{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}">
+                                <input   onchange="toggleGetDescriptorsButton()" class="photo-checkbox" type="checkbox" name="selectedImages[]" value="{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}" id="checkbox{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}">
                                 <label class="photo-label" for="checkbox{{ public_path('storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $photo->path) }}">Select</label>
                             </div>
                             <a href="{{ asset('/storage/photos/' . $photo->path) }}" target="_blank">
@@ -99,11 +99,16 @@
                     </div>
                 </div>
             @endforeach
+           
         </div>
             <div class="mt-3">
-                <button type="submit" class="btn btn-dark" >Get Descriptors</button>
+
+                <button id="getDescriptorsContainer" style="display: none;" type="submit" class="btn btn-dark" >Get Descriptors</button>
             </div>
         </form>
+        <div class="pagination" style="align-items: center; justify-content: center;">
+    {{ $photos->links() }}
+    </div>
     </div>
 </div>
 
@@ -151,7 +156,18 @@
     }
 }
 
-    
+function toggleGetDescriptorsButton() {
+        var checkboxes = document.querySelectorAll('.photo-checkbox');
+        var getDescriptorsContainer = document.getElementById('getDescriptorsContainer');
+        
+        // Check if any checkbox is checked
+        var anyCheckboxChecked = Array.from(checkboxes).some(function (checkbox) {
+            return checkbox.checked;
+        });
+
+        // Toggle the display of the "Get Descriptors" button accordingly
+        getDescriptorsContainer.style.display = anyCheckboxChecked ? 'block' : 'none';
+    }
 
 </script>
 @endsection

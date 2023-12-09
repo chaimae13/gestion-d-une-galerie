@@ -37,6 +37,8 @@
             height: auto;
            
         }
+
+        
     </style>
 </head>
 @section('content')

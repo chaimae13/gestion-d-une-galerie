@@ -170,7 +170,7 @@ public function index(Request $request)
 {
     $user = auth()->user();
     $themes = theme::all();
-    $perPage = 10;
+    $perPage = 12;
     $currentPage = $request->input('page', 1);
 
     $photos = DB::table('photos')

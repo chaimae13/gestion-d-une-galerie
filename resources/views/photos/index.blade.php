@@ -71,6 +71,7 @@
 </div>
 
 <div class="container">
+
     <div class="box" id="photoGallery">
         <div class="dream">
         <form method="POST" action="{{ route('perform.action') }}" id="performActionForm">
@@ -102,8 +103,7 @@
            
         </div>
             <div class="mt-3">
-
-                <button id="getDescriptorsContainer" style="display: none;" type="submit" class="btn btn-dark" >Get Descriptors</button>
+                <button type="submit" class="btn btn-dark" >Get Descriptors</button>
             </div>
         </form>
         <div class="pagination" style="align-items: center; justify-content: center;">

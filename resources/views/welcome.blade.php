@@ -30,7 +30,7 @@
 
     <h5> Welcome back ! </h5>
     <br>
-    <a class="btn btn-dark" href="{{ route('gallery') }}">Go to Gallery </a>
+    <a class="btn btn-dark" href="{{ route('objet') }}">Go to Gallery </a>
     <br>
 
 

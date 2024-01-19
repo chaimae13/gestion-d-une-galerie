@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AutheManager;
 use App\Http\Controllers\GetApi;
+use App\Http\Controllers\ObjetController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\Theme;
 use App\Http\Controllers\ThemeController;
@@ -30,6 +31,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/gallery', [PhotoController::class, 'upload']);
     Route::delete('/gallery/{photo}', [PhotoController::class, 'delete'])->name('photo.delete');
 });
+
+
+Route::post('/objet', [ObjetController::class, 'upload']);
+Route::get('/objet', [ObjetController::class, 'index'])->name('objet');
+Route::delete('/objet/{photo}', [ObjetController::class, 'delete'])->name('photo.delete');
+Route::get('/similar-objects/{id}', [ObjetController::class, 'listSimilarObjects'])->name('ListerObjet');
 
 
 Route::get('/getInfo/{photo_id}', [PhotoController::class, 'viewJSON'])->name('getInfo');

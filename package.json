@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "cropper": "^4.1.0",
-        "cropperjs": "^1.6.1"
+        "cropperjs": "^1.6.1",
+        "three": "^0.160.0"
     }
 }
